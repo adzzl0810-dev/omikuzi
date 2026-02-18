@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
+import { SEOHead } from '../components/seo/SEOHead';
 import { WagaraBackground } from '../components/WagaraBackground';
 import { Hero } from '../components/Hero';
 import { ColumnSection } from '../components/ColumnSection';
@@ -89,14 +89,13 @@ export const HomePage: React.FC = () => {
                 new Promise(resolve => setTimeout(resolve, 4500))
             ]);
 
-            // 2. Save result to DB & Increment Count
-            await userService.incrementReadingCount(user.id);
+            // 2. Perform Secure Reading Transaction (RPC)
+            // This handles DB insert && user count increment in one go
+            await userService.performReading(input, fortune, null);
 
-            // 3. Save result
             setResult(fortune);
 
-            // 4. Save COMPLETE reading to DB (No image)
-            await userService.saveReading(user.id, input, fortune, null);
+            // 3. (Legacy Image Logic Removed)
         } catch (error) {
             console.error(error);
             alert("The Spirits are silent... (API Error)");
@@ -135,12 +134,11 @@ export const HomePage: React.FC = () => {
 
     return (
         <div className="relative min-h-screen overflow-x-hidden bg-shinto-white font-serif text-jap-indigo selection:bg-jap-violet selection:text-white">
-            <Helmet>
-                <title>{result ? `Your Destiny: ${result.fortune} | Street Spirit` : "Street Spirit | Digital Sanctuary & Omikuji"}</title>
-                <meta name="description" content={result ? `I received a message from ${result.god_name}: "${result.waka.text}". Discover your own spirit guide at the Digital Sanctuary.` : "Enter the Digital Sanctuary. A modern spiritual space to connect with the Universe, receive guidance, and manifest your destiny through the algorithm."} />
-                <meta name="keywords" content="Digital Shrine, Online Omikuji, Manifestation Tool, Daily Guidance, Spirit Guides, Japanese Spirituality, Meditation" />
-                <meta property="og:title" content={result ? `My Spirit Guide: ${result.god_name}` : "Street Spirit: Digital Sanctuary"} />
-            </Helmet>
+            <SEOHead
+                title={result ? `Your Destiny: ${result.fortune} | Street Spirit` : "Street Spirit | Digital Sanctuary & Omikuji"}
+                description={result ? `I received a message from ${result.god_name}: "${result.waka.text}". Discover your own spirit guide at the Digital Sanctuary.` : "Enter the Digital Sanctuary. A modern spiritual space to connect with the Universe, receive guidance, and manifest your destiny through the algorithm."}
+                image="/pwa-512x512.png"
+            />
 
             <WagaraBackground />
             <KamiParticles />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { SEOHead } from '../components/seo/SEOHead';
 import { ARTICLES } from '../data/articles';
 
 export const ColumnsPage: React.FC = () => {
@@ -8,6 +9,11 @@ export const ColumnsPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-shinto-white font-serif text-jap-indigo">
+            <SEOHead
+                title="Spiritual Insights | Street Spirit"
+                description="Read articles on the intersection of technology, spirituality, and modern life."
+                path="/columns"
+            />
 
             <div className="pt-32 pb-20 px-4 max-w-7xl mx-auto">
                 <div className="text-center mb-16">

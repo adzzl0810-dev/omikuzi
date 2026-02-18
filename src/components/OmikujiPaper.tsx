@@ -6,6 +6,8 @@ import { Download } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
+import { getAmazonSearchUrl } from '../utils/affiliate';
 
 interface OmikujiPaperProps {
     result: OmikujiResult;
@@ -170,7 +172,20 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
                         { label: "Wisdom (学問)", val: result.advice.studies },
                         { label: "Journey (旅立ち)", val: result.advice.travel },
                         { label: "Lost Items (失せ物)", val: result.advice.lost_item },
-                        { label: "Lucky Key (幸運鍵)", val: result.lucky_item },
+                        {
+                            label: "Lucky Key (幸運鍵)", val: (
+                                <a
+                                    href={getAmazonSearchUrl(result.lucky_item)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-1 hover:text-jap-vermilion transition-colors group/link"
+                                    title={`Shop for ${result.lucky_item} on Amazon`}
+                                >
+                                    <span className="underline decoration-jap-gold-300 underline-offset-4 group-hover/link:decoration-jap-vermilion">{result.lucky_item}</span>
+                                    <ExternalLink size={12} className="opacity-50 group-hover/link:opacity-100" />
+                                </a>
+                            )
+                        },
                     ].map((item, i) => (
                         <div key={i} className="border-b border-jap-gold-200 pb-2 group">
                             <span className="font-bold text-jap-vermilion block text-xs uppercase tracking-[0.2em] mb-1 group-hover:text-jap-gold-500 transition-colors">{item.label}</span>

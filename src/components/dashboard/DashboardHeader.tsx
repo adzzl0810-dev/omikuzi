@@ -11,9 +11,10 @@ interface DashboardHeaderProps {
         goshuinCount: number;
     };
     onSignOut: () => void;
+    onLinkAccount?: () => void;
 }
 
-export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ user, stats, onSignOut }) => {
+export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ user, stats, onSignOut, onLinkAccount }) => {
     return (
         <div className="w-full bg-white/80 backdrop-blur-md border-b border-jap-gold-100 sticky top-0 z-30">
             <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 flex flex-col md:flex-row items-center justify-between gap-4">
@@ -62,14 +63,26 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ user, stats, o
                     />
                 </div>
 
-                {/* Sign Out (Desktop) */}
-                <button
-                    onClick={onSignOut}
-                    className="hidden md:flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-jap-vermilion transition-colors uppercase tracking-widest"
-                >
-                    <span>Sign Out</span>
-                    <LogOut size={14} />
-                </button>
+                {/* Account Actions */}
+                <div className="hidden md:flex items-center gap-4">
+                    {user?.is_anonymous && (
+                        <button
+                            onClick={onLinkAccount}
+                            className="bg-jap-vermilion text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-colors shadow-sm flex items-center gap-2 animate-pulse"
+                        >
+                            <Sparkles size={14} />
+                            <span>Save Data</span>
+                        </button>
+                    )}
+
+                    <button
+                        onClick={onSignOut}
+                        className="flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-jap-vermilion transition-colors uppercase tracking-widest"
+                    >
+                        <span>Sign Out</span>
+                        <LogOut size={14} />
+                    </button>
+                </div>
             </div>
         </div>
     );

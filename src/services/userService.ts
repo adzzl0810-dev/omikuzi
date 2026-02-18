@@ -19,21 +19,36 @@ export const userService = {
         return data;
     },
 
-    async incrementReadingCount(userId: string): Promise<void> {
-        // First get current count
-        const currentData = await userService.getUserData(userId);
-        if (!currentData) return;
+    async updateStreak(userId: string): Promise<void> {
+        const data = await userService.getUserData(userId);
+        await userService.checkAndUpdateStreak(userId, data);
+    },
 
-        const { error } = await (supabase as any)
-            .from('users')
-            .update({ readings_count: (currentData.readings_count || 0) + 1 })
-            .eq('id', userId);
+    async performReading(input: string, result: any, godImageUrl: string | null): Promise<void> {
+        // Use RPC for secure transaction
+        // Note: userId is derived from auth.uid() in the RPC for security
+        // Casting to any to avoid TS error with manual type definition
+        const { error } = await (supabase as any).rpc('perform_reading', {
+            p_input_text: input,
+            p_fortune_level: result.fortune,
+            p_advice_json: result,
+            p_lucky_item: result.lucky_item,
+            p_god_name: result.god_name,
+            p_god_image_url: godImageUrl
+        });
 
         if (error) {
-            console.error('Error incrementing reading count:', error);
+            console.error('RPC perform_reading failed:', error);
+            // Fallback to client-side if RPC fails (e.g., during migration)
+            // But if RLS blocks insert, this fallback will also fail.
+            // For now, let's assume RPC exists.
+            throw new Error('Failed to save reading securely.');
         }
+    },
 
-        await userService.checkAndUpdateStreak(userId, currentData);
+    // Deprecated: Use performReading instead
+    async incrementReadingCount(_userId: string): Promise<void> {
+        console.warn('incrementReadingCount is deprecated. Use performReading.');
     },
 
     async checkAndUpdateStreak(userId: string, currentData: UserData | null): Promise<void> {
@@ -44,7 +59,6 @@ export const userService = {
         let newStreak = currentData.streak_days || 0;
 
         if (lastActive === today) {
-            // Already active today, do nothing
             return;
         }
 
@@ -53,13 +67,12 @@ export const userService = {
         const yesterdayStr = yesterday.toISOString().split('T')[0];
 
         if (lastActive === yesterdayStr) {
-            // Consecutive day
             newStreak += 1;
         } else {
-            // Streak broken (or first time)
             newStreak = 1;
         }
 
+        // We still allow client-side streak updates for now until we make a daily_login RPC
         const { error } = await (supabase as any)
             .from('users')
             .update({
@@ -75,27 +88,12 @@ export const userService = {
 
     async canReadFree(userId: string): Promise<boolean> {
         const data = await userService.getUserData(userId);
-        // Allow if no data (assume new) or count is 0
         if (!data) return true;
         return (data.readings_count || 0) < 1;
     },
 
-    async saveReading(userId: string, input: string, result: any, godImageUrl: string | null): Promise<void> {
-        const { error } = await supabase
-            .from('readings')
-            .insert({
-                user_id: userId,
-                input_text: input,
-                fortune_level: result.fortune,
-                advice_json: result,
-                lucky_item: result.lucky_item,
-                god_name: result.god_name,
-                god_image_url: godImageUrl,
-                is_paid: false
-            } as any); // Cast to any to avoid strict type definition mismatch for now
-
-        if (error) {
-            console.error('Error saving reading:', error);
-        }
+    // Deprecated: Is now handled inside performReading RPC
+    async saveReading(_userId: string, _input: string, _result: any, _godImageUrl: string | null): Promise<void> {
+        console.warn('saveReading is deprecated. Use performReading.');
     }
 };

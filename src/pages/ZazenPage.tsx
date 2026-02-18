@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import { SEOHead } from '../components/seo/SEOHead';
 import { BackgroundCircles } from '../components/ui/background-circles';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
@@ -113,9 +113,11 @@ export const ZazenPage: React.FC = () => {
         <div className="min-h-screen bg-shinto-white font-serif text-jap-indigo relative overflow-hidden transition-colors duration-[2000ms]"
             style={isActive ? { backgroundColor: '#050510', color: '#E0E0E0' } : {}}
         >
-            <Helmet>
-                <title>Zazen (Meditation) | Street Spirit</title>
-            </Helmet>
+            <SEOHead
+                title="Zazen (Meditation) | Street Spirit"
+                description="Practice digital Zazen. Quiet your mind with guided meditation and ambient soundscapes."
+                path="/zazen"
+            />
 
             {/* Background for immersion */}
             <div className={`absolute inset-0 transition-opacity duration-[2000ms] ${isActive ? 'opacity-30' : 'opacity-10'}`}>

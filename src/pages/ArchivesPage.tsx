@@ -7,6 +7,7 @@ import { GoshuinCho } from '../components/GoshuinCho';
 import { useNavigate } from 'react-router-dom';
 import { DashboardHeader } from '../components/dashboard/DashboardHeader';
 import { AchievementsView } from '../components/dashboard/AchievementsView';
+import { SEOHead } from '../components/seo/SEOHead';
 
 interface Reading {
     id: string;
@@ -25,7 +26,7 @@ interface ZazenSession {
 }
 
 export const ArchivesPage: React.FC = () => {
-    const { user, signOut } = useAuth();
+    const { user, signOut, signInWithGoogle } = useAuth();
     const [readings, setReadings] = useState<Reading[]>([]);
     const [sessions, setSessions] = useState<ZazenSession[]>([]);
     const [userProfile, setUserProfile] = useState<{ streak_days?: number } | null>(null);
@@ -97,13 +98,23 @@ export const ArchivesPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-shinto-white font-serif text-jap-indigo relative">
+            <SEOHead
+                title="My Archives | Street Spirit"
+                description="View your spiritual journey, past omikuji readings, and meditation history."
+                path="/archives"
+            />
             <div className="absolute inset-0 z-0 pointer-events-none opacity-20 fixed">
                 <BackgroundCircles variant="primary" />
             </div>
 
             {/* Dashboard Header */}
             {user && (
-                <DashboardHeader user={user} stats={stats} onSignOut={handleSignOut} />
+                <DashboardHeader
+                    user={user}
+                    stats={stats}
+                    onSignOut={handleSignOut}
+                    onLinkAccount={signInWithGoogle}
+                />
             )}
 
             <div className="relative z-10 pt-8 px-4 pb-12 max-w-7xl mx-auto flex flex-col items-center">

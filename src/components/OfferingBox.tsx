@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ExternalLink } from 'lucide-react';
 
 interface OfferingBoxProps {
     onOffered: () => void;
@@ -102,6 +103,26 @@ export const OfferingBox: React.FC<OfferingBoxProps> = ({ onOffered }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Real Offering Link (Phase 10) */}
+            {import.meta.env.VITE_SAISEN_LINK && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1 }}
+                    className="mt-4"
+                >
+                    <a
+                        href={import.meta.env.VITE_SAISEN_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-jap-gold-500 hover:text-jap-vermilion tracking-[0.2em] uppercase border-b border-transparent hover:border-jap-vermilion transition-all pb-1 flex items-center gap-2"
+                    >
+                        <span>Support the Digital Sanctuary</span>
+                        <ExternalLink size={10} />
+                    </a>
+                </motion.div>
+            )}
         </div>
     );
 };

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Clock, Tag } from 'lucide-react';
 import { ARTICLES } from '../data/articles';
-import { Helmet } from 'react-helmet-async';
+import { SEOHead } from '../components/seo/SEOHead';
 
 export const ArticleDetailPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -32,9 +32,13 @@ export const ArticleDetailPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-shinto-white font-serif text-jap-indigo">
-            <Helmet>
-                <title>{article.title} | Street Spirit Columns</title>
-            </Helmet>
+            <SEOHead
+                title={`${article.title} | Street Spirit Columns`}
+                description={article.excerpt}
+                image={article.image}
+                type="article"
+                path={`/columns/${article.id}`}
+            />
 
             {/* Hero Image */}
             <div className="h-[60vh] relative overflow-hidden">

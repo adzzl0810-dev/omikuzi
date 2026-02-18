@@ -144,5 +144,24 @@ export interface Database {
                 }
             }
         }
+        Functions: {
+            perform_reading: {
+                Args: {
+                    p_input_text: string
+                    p_fortune_level: string
+                    p_advice_json: Json
+                    p_lucky_item: string
+                    p_god_name: string
+                    p_god_image_url?: string | null
+                }
+                Returns: Json
+            }
+            migrate_anonymous_readings: {
+                Args: {
+                    anonymous_user_id: string
+                }
+                Returns: void
+            }
+        }
     }
 }
