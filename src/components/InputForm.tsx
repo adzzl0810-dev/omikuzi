@@ -56,9 +56,15 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit: _onSubmit, isLoa
                     </div>
                 </div>
 
+                <div className="text-center mb-4">
+                    <p className="text-sm font-sans font-medium text-jap-gold-300">
+                        ※ おみくじを引くには 100円〜 のお賽銭（初穂料）が必要です
+                    </p>
+                </div>
+
                 <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover="hover"
+                    whileTap="tap"
                     disabled={isLoading || !input.trim()}
                     type="submit"
                     className={`w-full py-4 font-bold text-lg tracking-widest uppercase transition-all duration-300 relative overflow-hidden group 

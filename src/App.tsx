@@ -8,6 +8,8 @@ import { ArticleDetailPage } from './pages/ArticleDetailPage';
 import { ZazenPage } from './pages/ZazenPage';
 import { ZazenGuidePage } from './pages/ZazenGuidePage';
 import { AudioController } from './components/AudioController';
+import AboutPage from './pages/AboutPage';
+import LuckyItemPage from './pages/LuckyItemPage';
 
 import AnimatedSignIn from './components/ui/AnimatedSignIn';
 
@@ -17,8 +19,6 @@ import { SoundProvider } from './contexts/SoundContext';
 import { ReloadPrompt } from './components/ReloadPrompt';
 
 function App() {
-
-
     return (
         <SoundProvider>
             <Helmet>
@@ -32,6 +32,8 @@ function App() {
                 <Routes>
                     <Route element={<DashboardLayout />}>
                         <Route path="/" element={<HomePage />} />
+                        <Route path="/about" element={<AboutPage />} />
+                        <Route path="/lucky-item" element={<LuckyItemPage />} />
                         <Route path="/columns" element={<ColumnsPage />} />
                         <Route path="/columns/:id" element={<ArticleDetailPage />} />
                         <Route path="/archives" element={<ArchivesPage />} />
