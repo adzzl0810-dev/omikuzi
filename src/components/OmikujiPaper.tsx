@@ -9,13 +9,15 @@ import { Link } from 'react-router-dom';
 
 interface OmikujiPaperProps {
     result: OmikujiResult;
-    godImage: string | null;
+    godImage?: string | null;
     onRetry: () => void;
 }
 
 export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, onRetry }) => {
     const [showToast, setShowToast] = useState(false);
     const paperRef = React.useRef<HTMLDivElement>(null);
+
+    // ... (keep handleDownloadImage and handleShare same)
 
     const handleDownloadImage = async () => {
         if (!paperRef.current) return;
@@ -120,11 +122,20 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
 
                 {/* God Image & Name */}
                 <div className="flex flex-col items-center gap-6 mb-12 w-full">
-                    {godImage && (
+                    {godImage ? (
                         <div className="relative w-56 h-72 border-8 border-white shadow-xl hover:rotate-1 transition-transform duration-700 bg-gray-100">
                             {/* Frame Inner */}
                             <div className="absolute inset-0 border border-black/10 z-10 pointer-events-none"></div>
                             <img src={godImage} alt={result.god_name} className="w-full h-full object-cover" />
+                        </div>
+                    ) : (
+                        <div className="relative w-40 h-40 flex items-center justify-center">
+                            <div className="absolute inset-0 bg-jap-gold-100 rounded-full animate-pulse blur-xl"></div>
+                            <div className="relative w-32 h-32 bg-jap-indigo text-jap-gold-300 rounded-full flex items-center justify-center border-4 border-jap-gold-300 shadow-lg">
+                                <span className="text-6xl font-serif font-bold pt-2 select-none">
+                                    {result.god_name.charAt(0)}
+                                </span>
+                            </div>
                         </div>
                     )}
                     <div className="text-center">

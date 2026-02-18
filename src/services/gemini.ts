@@ -67,8 +67,7 @@ export const generateFortune = async (userInput: string): Promise<OmikujiResult>
         "illness": "String (Recovery or caution needed?)",
         "proposal": "String (Marriage/Partnership advice)"
       },
-      "lucky_item": "String (A modern or traditional item, e.g., 'Crystal Bead', 'Old Smartphone', 'White Handkerchief')",
-      "god_prompt": "String (A highly detailed image generation prompt for this Anthropomorphized God. Keywords: 'Anime style', 'Divine Character Design', 'Gijinka', 'Japanese Deity', 'Kimono with digital patterns', 'Glowing halo'. Describe the character's gender, appearance, clothing, and divine aura based on the god_name.)"
+      "lucky_item": "String (A modern or traditional item, e.g., 'Crystal Bead', 'Old Smartphone', 'White Handkerchief')"
     }
   `;
 
