@@ -1,0 +1,62 @@
+/* Smoke Animation */
+.smoke-container {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 200px;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.smoke-particle {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    filter: blur(5px);
+    animation: rise 4s ease-in infinite;
+    opacity: 0;
+}
+
+@keyframes rise {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 0) scale(1);
+    }
+
+    10% {
+        opacity: 0.8;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -150px) scale(4);
+    }
+}
+
+/* Add variations for more natural look */
+.smoke-particle:nth-child(2n) {
+    animation-duration: 3.5s;
+    animation-delay: 0.5s;
+    transform-origin: 20% 0;
+}
+
+.smoke-particle:nth-child(3n) {
+    animation-duration: 4.2s;
+    animation-delay: 1s;
+    transform-origin: -30% 0;
+}
+
+.smoke-particle:nth-child(4n) {
+    animation-duration: 3.8s;
+    animation-delay: 1.5s;
+}
