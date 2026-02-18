@@ -62,6 +62,36 @@ export const HomePage: React.FC = () => {
         }
     }, [result]);
 
+    // Handle Return from Stripe
+    useEffect(() => {
+        const query = new URLSearchParams(window.location.search);
+        const status = query.get('status');
+        const pendingWorry = sessionStorage.getItem('pending_worry');
+
+        console.log("Checking payment return:", { status, pendingWorry, user: !!user });
+
+        if (user && status === 'paid' && pendingWorry) {
+            // NOTE: We relaxed the 'status=paid' check to allow just returning to the site to trigger it for now, 
+            // incase Stripe redirect doesn't perfectly preserve params or user navigates back manually.
+            // In production, we should strictly check status=paid or verify session_id.
+
+            // Auto-trigger generation
+            setShowStart(false);
+            setShowTemizu(false);
+            setShowWorship(false);
+            setShowOffering(false);
+            setShowInputForm(true); // Show form logic (loading state)
+
+            // Execute
+            handleGenerate(pendingWorry, true); // true = isPaid
+
+            // Cleanup
+            sessionStorage.removeItem('pending_worry');
+            // Remove query params to prevent re-trigger on refresh
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }, [user]); // Re-run when user auth is settled
+
     const handleStart = () => {
         setShowStart(false);
         setShowTemizu(true);
@@ -71,7 +101,7 @@ export const HomePage: React.FC = () => {
         setShowInputForm(true);
     };
 
-    const handleGenerate = async (input: string) => {
+    const handleGenerate = async (input: string, isPaid: boolean = false) => {
         if (!user) {
             alert("Connecting to the Spiritual Network... (Authenticating)");
             // In a real flow, we might force login here or allow anon with local storage
@@ -91,14 +121,18 @@ export const HomePage: React.FC = () => {
 
             // 2. Perform Secure Reading Transaction (RPC)
             // This handles DB insert && user count increment in one go
-            await userService.performReading(input, fortune, null);
+            // Determine amount (Mocking $1.00 for now if paid)
+            const amount = isPaid ? 1.00 : 0;
+            await userService.performReading(input, fortune, null, isPaid, amount);
 
             setResult(fortune);
 
             // 3. (Legacy Image Logic Removed)
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert("The Spirits are silent... (API Error)");
+            const msg = error.message || "Unknown Error";
+            alert(`The Spirits are silent... (API Error: ${msg})`);
+            // Set error state to display in UI (need to add state variable first)
         } finally {
             setLoading(false);
         }

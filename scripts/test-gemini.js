@@ -1,4 +1,10 @@
-const API_KEY = "AIzaSyBGnqzt4LjvtftXkR77wHr5kw2ZJHWhOnw";
+import 'dotenv/config';
+const API_KEY = process.env.GOOGLE_API_KEY;
+
+if (!API_KEY) {
+    console.error("Error: GOOGLE_API_KEY environment variable is not set.");
+    process.exit(1);
+}
 
 async function listModels() {
     const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${API_KEY}`;

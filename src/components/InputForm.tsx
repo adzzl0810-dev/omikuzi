@@ -7,13 +7,22 @@ interface InputFormProps {
     isLoading: boolean;
 }
 
-export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => {
+export const InputForm: React.FC<InputFormProps> = ({ onSubmit: _onSubmit, isLoading }) => {
     const [input, setInput] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (input.trim() && !isLoading) {
-            onSubmit(input);
+            // Save worry to session storage for retrieval after payment
+            sessionStorage.setItem('pending_worry', input);
+
+            // Redirect to Stripe
+            const paymentLink = import.meta.env.VITE_STRIPE_PAYMENT_LINK;
+            if (paymentLink) {
+                window.location.href = paymentLink;
+            } else {
+                alert("Payment link not configured. Please contact the shrine.");
+            }
         }
     };
 
@@ -55,16 +64,16 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
                     className={`w-full py-4 font-bold text-lg tracking-widest uppercase transition-all duration-300 relative overflow-hidden group 
                         ${isLoading || !input.trim()
                             ? 'bg-gray-800 text-gray-500 cursor-not-allowed border-gray-700'
-                            : 'bg-neon-purple/20 text-neon-purple border border-neon-purple hover:bg-neon-purple hover:text-white hover:shadow-[0_0_20px_#bc13fe]'
+                            : 'bg-jap-vermilion text-white border border-jap-vermilion hover:bg-jap-vermilion/80 hover:shadow-[0_0_20px_rgba(255,51,51,0.5)]'
                         } border`}
                 >
                     {isLoading ? (
                         <span className="flex items-center justify-center gap-2">
                             <KikyoMon className="animate-spin w-6 h-6 text-current" />
-                            CONNECTING TO ORACLE...
+                            CONNECTING...
                         </span>
                     ) : (
-                        <span>OFFER PRAYER (送信)</span>
+                        <span>OFFER & PAY (初穂料を納める)</span>
                     )}
                 </motion.button>
             </form>

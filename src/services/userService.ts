@@ -24,7 +24,7 @@ export const userService = {
         await userService.checkAndUpdateStreak(userId, data);
     },
 
-    async performReading(input: string, result: any, godImageUrl: string | null): Promise<void> {
+    async performReading(input: string, result: any, godImageUrl: string | null, isPaid: boolean = false, amountPaid: number = 0): Promise<void> {
         // Use RPC for secure transaction
         // Note: userId is derived from auth.uid() in the RPC for security
         // Casting to any to avoid TS error with manual type definition
@@ -34,7 +34,11 @@ export const userService = {
             p_advice_json: result,
             p_lucky_item: result.lucky_item,
             p_god_name: result.god_name,
-            p_god_image_url: godImageUrl
+            p_god_image_url: godImageUrl,
+            p_is_paid: isPaid,
+            p_amount_paid: amountPaid,
+            p_currency: 'USD',
+            p_stripe_session_id: null // We could pass this if available
         });
 
         if (error) {
@@ -42,7 +46,7 @@ export const userService = {
             // Fallback to client-side if RPC fails (e.g., during migration)
             // But if RLS blocks insert, this fallback will also fail.
             // For now, let's assume RPC exists.
-            throw new Error('Failed to save reading securely.');
+            throw new Error(`Failed to save reading securely: ${error.message} (${error.code})`);
         }
     },
 
