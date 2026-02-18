@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 interface AuthContextType {
     user: User | null;
     loading: boolean;
-    signInWithGoogle: () => Promise<void>;
+    signInWithGoogle: (redirectPath?: string) => Promise<void>;
     signOut: () => Promise<void>;
 }
 
@@ -85,17 +85,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    const signInWithGoogle = async () => {
+    const signInWithGoogle = async (redirectPath: string = '/archives') => {
         try {
             // Save current anonymous ID before redirecting
             if (user?.is_anonymous) {
                 localStorage.setItem('street_spirit_anon_id', user.id);
             }
 
+            // Construct the full redirect URL
+            // We use window.location.origin to get the base URL (e.g., https://street-spirit.app)
+            // ensuring we don't hardcode localhost or production URLs
+            const redirectUrl = new URL(redirectPath, window.location.origin).toString();
+
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin
+                    redirectTo: redirectUrl
                 }
             });
             if (error) throw error;
