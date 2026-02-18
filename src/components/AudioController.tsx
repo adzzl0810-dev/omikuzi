@@ -15,6 +15,18 @@ export const AudioController: React.FC = () => {
         if (!isPlaying) togglePlay();
     };
 
+    // Auto-dismiss the prompt after 10 seconds to be less obtrusive
+    React.useEffect(() => {
+        if (!hasInteracted) {
+            const timer = setTimeout(() => {
+                setHasInteracted(true);
+                // We don't save to localStorage here so it might show again next session, 
+                // or we can save it to 'dismissed' state. For now, let's just hide it.
+            }, 10000);
+            return () => clearTimeout(timer);
+        }
+    }, [hasInteracted]);
+
     const handleToggle = () => {
         if (!hasInteracted) {
             handleInitialPlay();

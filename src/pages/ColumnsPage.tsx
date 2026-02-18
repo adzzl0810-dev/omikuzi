@@ -35,11 +35,7 @@ export const ColumnsPage: React.FC = () => {
                         >
                             <div className="relative overflow-hidden aspect-[16/10]">
                                 <div className="absolute inset-0 bg-jap-indigo/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
-                                <img
-                                    src={article.image}
-                                    alt={article.title}
-                                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
-                                />
+                                <ArticleImage src={article.image} alt={article.title} />
                                 <div className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-bold tracking-widest text-jap-indigo uppercase">
                                     COLUMN {article.id}
                                 </div>
@@ -64,5 +60,28 @@ export const ColumnsPage: React.FC = () => {
                 </div>
             </div>
         </div>
+    );
+};
+
+const ArticleImage = ({ src, alt }: { src: string, alt: string }) => {
+    const [error, setError] = React.useState(false);
+
+    if (error) {
+        return (
+            <div className="w-full h-full bg-jap-indigo/5 flex items-center justify-center">
+                <div className="text-jap-indigo/20 font-serif text-4xl">
+                    Street Spirit
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <img
+            src={src}
+            alt={alt}
+            onError={() => setError(true)}
+            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
+        />
     );
 };
