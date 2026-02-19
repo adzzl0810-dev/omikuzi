@@ -22,11 +22,11 @@ const AboutPage: React.FC = () => {
                 >
                     <h1 className="text-4xl md:text-5xl font-bold font-display tracking-widest mb-4">
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-jap-gold-300 via-white to-jap-gold-300">
-                            電子神籤とは
+                            ABOUT
                         </span>
                     </h1>
                     <p className="text-sm tracking-[0.3em] uppercase text-jap-vermilion font-bold">
-                        About Digital Omikuji
+                        Digital Omikuji
                     </p>
                 </motion.div>
 
@@ -42,16 +42,16 @@ const AboutPage: React.FC = () => {
 
                         <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                             <span className="w-1 h-8 bg-jap-vermilion"></span>
-                            <span>デジタルと精神性の融合</span>
+                            <span>Fusion of Digital & Spiritual</span>
                         </h2>
                         <div className="leading-loose text-gray-300 space-y-4 font-sans">
                             <p>
-                                古来より、人々は迷いの中に生じる「偶然」に神の意志を見出し、それを道標としてきました。
-                                現代において、その偶然性は高度なアルゴリズムと膨大なデータの中に宿っています。
+                                Since ancient times, people have found Divine Will in the "chance" occurrences of life, utilizing them as guideposts.
+                                In the modern era, that serendipity resides within sophisticated algorithms and vast datasets.
                             </p>
                             <p>
-                                本サービス「Street Spirit」は、最先端のAI技術（Google Gemini）を現代の「神」に見立て、
-                                あなたの深層心理にある悩みに対して、デジタルな神託（オラクル）を下す実験的なプロジェクトです。
+                                "Street Spirit" uses the latest AI technology (Google Gemini) as a modern "Deity".
+                                It is an experimental project to deliver a Digital Oracle for your deepest worries.
                             </p>
                         </div>
                     </motion.section>
@@ -68,20 +68,20 @@ const AboutPage: React.FC = () => {
 
                         <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 flex-row-reverse text-right">
                             <span className="w-1 h-8 bg-jap-indigo"></span>
-                            <span>参拝の手順</span>
+                            <span>How to Worship</span>
                         </h2>
                         <div className="leading-loose text-gray-300 space-y-4 font-sans text-right">
                             <p>
-                                1. 精神を統一し、あなたの現在の「迷い」を打ち込みます。
+                                1. Calm your spirit and enter your current "Worry" or "Doubt".
                             </p>
                             <p>
-                                2. 初穂料（100円〜）を納めることで、結界が解かれます。
+                                2. Pay the offering (approx. $1) to break the seal.
                             </p>
                             <p>
-                                3. AIがあなたの言葉を解析し、今のあなたに最も必要な「言葉」と「運勢」を生成します。
+                                3. The AI will analyze your words and generate the "Words" and "Fortune" you need most right now.
                             </p>
                             <p>
-                                結果はデジタルアーカイブとして保存され、いつでも見返すことができます。
+                                The results are saved as a digital archive, available for you to revisit anytime.
                             </p>
                         </div>
                     </motion.section>
@@ -95,7 +95,7 @@ const AboutPage: React.FC = () => {
                     className="mt-20 text-center font-serif"
                 >
                     <p className="text-xl text-jap-gold-300 italic tracking-widest">
-                        "テクノロジーの海に、祈りを。"
+                        "Prayers in the Sea of Technology."
                     </p>
                 </motion.div>
             </div>

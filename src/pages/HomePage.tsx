@@ -206,7 +206,7 @@ export const HomePage: React.FC = () => {
                         {/* Ema Wall Section */}
                         <div className="w-full relative py-20 pb-40 bg-gradient-to-b from-shinto-white to-[#f0f0f0]">
                             <h3 className="text-center text-jap-vermilion font-bold tracking-[0.2em] uppercase mb-12">
-                                Community Wishes (絵馬)
+                                Community Wishes (EMA)
                             </h3>
                             <EmaWall />
                             <div className="absolute bottom-20 left-0 right-0 flex justify-center pointer-events-none z-30">

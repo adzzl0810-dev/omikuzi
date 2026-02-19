@@ -45,7 +45,7 @@ export const OmikujiBox: React.FC = () => {
                             {/* Decorative Kanji Strip */}
                             <div className="absolute inset-y-4 inset-x-8 border-2 border-jap-vermilion/50 flex flex-col items-center justify-center gap-4 bg-white/50 backdrop-blur-sm">
                                 <div className="text-4xl font-serif text-jap-vermilion font-bold writing-vertical-rl tracking-widest drop-shadow-sm">
-                                    御神籤
+                                    OMIKUJI
                                 </div>
                             </div>
 
@@ -64,7 +64,7 @@ export const OmikujiBox: React.FC = () => {
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                             >
                                 <div className="text-xs font-bold text-jap-vermilion writing-vertical-rl tracking-widest">
-                                    運勢
+                                    FORTUNE
                                 </div>
                                 <div className="absolute bottom-0 w-full h-4 bg-red-600" /> {/* Painted tip */}
                             </motion.div>
