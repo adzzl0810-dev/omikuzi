@@ -8,9 +8,9 @@ import { useSound } from '../contexts/SoundContext';
 import '../styles/smoke.css';
 
 const COURSES = [
-    { id: 'beginner', label: 'Beginner', duration: 5, labelJp: '初級 (5分)' },
-    { id: 'intermediate', label: 'Intermediate', duration: 15, labelJp: '中級 (15分)' },
-    { id: 'advanced', label: 'Advanced', duration: 30, labelJp: '上級 (30分)' },
+    { id: 'beginner', label: 'Beginner', duration: 5, labelJp: 'Beginner (5 MIN)' },
+    { id: 'intermediate', label: 'Intermediate', duration: 15, labelJp: 'Intermed. (15 MIN)' },
+    { id: 'advanced', label: 'Advanced', duration: 30, labelJp: 'Advanced (30 MIN)' },
 ];
 
 const ZAZEN_BGM = "/audio/harumachimusic-misty-lake-358265.mp3";
@@ -142,7 +142,7 @@ export const ZazenPage: React.FC = () => {
                             <span className="text-jap-vermilion font-bold tracking-[0.3em] uppercase text-xs mb-4 block">
                                 Digital Zen
                             </span>
-                            <h1 className="text-4xl md:text-6xl font-brush mb-8">坐禅</h1>
+                            <h1 className="text-4xl md:text-6xl font-brush mb-8">ZAZEN</h1>
 
                             <p className="text-lg mb-12 leading-relaxed opacity-80 font-sans">
                                 Quiet your mind. Focus on your breath.<br />

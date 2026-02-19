@@ -46,6 +46,17 @@ const LuckyItemPage: React.FC = () => {
         ? `https://www.amazon.com/s?k=${encodeURIComponent(result.en)}&tag=${import.meta.env.VITE_AMAZON_ASSOCIATE_TAG || ''}`
         : '#';
 
+    // Debug logging
+    React.useEffect(() => {
+        if (result) {
+            console.log("Generating Amazon Link:", {
+                item: result.en,
+                tag: import.meta.env.VITE_AMAZON_ASSOCIATE_TAG,
+                url: amazonLink
+            });
+        }
+    }, [result, amazonLink]);
+
     return (
         <div className="min-h-screen relative overflow-hidden font-serif text-white pt-24 pb-20 px-4 md:px-8">
             <WagaraBackground />
@@ -78,10 +89,11 @@ const LuckyItemPage: React.FC = () => {
                     <form onSubmit={handleCalculate} className="space-y-6">
                         <div>
                             <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2">
-                                Date of Birth
+                                Date of Birth <span className="text-[10px] opacity-50">(MM/DD/YYYY)</span>
                             </label>
                             <input
                                 type="date"
+                                lang="en-US"
                                 value={birthday}
                                 onChange={(e) => setBirthday(e.target.value)}
                                 className="w-full bg-black/40 border-b border-gray-600 focus:border-neon-cyan py-3 px-2 focus:outline-none transition-all font-mono text-lg text-white"
