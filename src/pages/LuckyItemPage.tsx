@@ -23,7 +23,9 @@ const LUCKY_ITEMS = [
 ];
 
 const LuckyItemPage: React.FC = () => {
-    const [birthday, setBirthday] = useState('');
+    const [birthMonth, setBirthMonth] = useState('');
+    const [birthDay, setBirthDay] = useState('');
+    const [birthYear, setBirthYear] = useState('');
     const [result, setResult] = useState<{ name: string; en: string } | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -33,10 +35,11 @@ const LuckyItemPage: React.FC = () => {
 
         // Simulate calculation time for effect
         setTimeout(() => {
-            if (!birthday) return;
+            if (!birthMonth || !birthDay || !birthYear) return;
 
             // Simple deterministic algorithm based on date string
-            const sum = birthday.split('').reduce((acc, char) => acc + (parseInt(char) || 0), 0);
+            const birthdayStr = `${birthYear}-${birthMonth}-${birthDay}`;
+            const sum = birthdayStr.split('').reduce((acc, char) => acc + (parseInt(char) || 0), 0);
             const index = sum % LUCKY_ITEMS.length;
             setResult(LUCKY_ITEMS[index]);
             setLoading(false);
@@ -92,18 +95,62 @@ const LuckyItemPage: React.FC = () => {
                             <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2">
                                 Date of Birth <span className="text-[10px] opacity-50">(MM/DD/YYYY)</span>
                             </label>
-                            <input
-                                type="date"
-                                lang="en-US"
-                                value={birthday}
-                                onChange={(e) => setBirthday(e.target.value)}
-                                className="w-full bg-black/40 border-b border-gray-600 focus:border-neon-cyan py-3 px-2 focus:outline-none transition-all font-mono text-lg text-white appearance-none"
-                                required
-                            />
+
+                            <div className="flex gap-4">
+                                {/* Month */}
+                                <div className="relative flex-1">
+                                    <select
+                                        value={birthMonth}
+                                        onChange={(e) => setBirthMonth(e.target.value)}
+                                        className="w-full bg-black/40 border-b border-gray-600 focus:border-neon-cyan py-3 px-2 focus:outline-none transition-all font-mono text-lg text-white appearance-none cursor-pointer"
+                                        required
+                                    >
+                                        <option value="" disabled className="text-gray-500">MM</option>
+                                        {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
+                                            <option key={m} value={m} className="bg-black text-white">
+                                                {String(m).padStart(2, '0')}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 text-xs">▼</div>
+                                </div>
+
+                                {/* Day */}
+                                <div className="relative flex-1">
+                                    <select
+                                        value={birthDay}
+                                        onChange={(e) => setBirthDay(e.target.value)}
+                                        className="w-full bg-black/40 border-b border-gray-600 focus:border-neon-cyan py-3 px-2 focus:outline-none transition-all font-mono text-lg text-white appearance-none cursor-pointer"
+                                        required
+                                    >
+                                        <option value="" disabled className="text-gray-500">DD</option>
+                                        {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
+                                            <option key={d} value={d} className="bg-black text-white">
+                                                {String(d).padStart(2, '0')}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 text-xs">▼</div>
+                                </div>
+
+                                {/* Year */}
+                                <div className="flex-1">
+                                    <input
+                                        type="number"
+                                        placeholder="YYYY"
+                                        min="1900"
+                                        max={new Date().getFullYear()}
+                                        value={birthYear}
+                                        onChange={(e) => setBirthYear(e.target.value)}
+                                        className="w-full bg-black/40 border-b border-gray-600 focus:border-neon-cyan py-3 px-2 focus:outline-none transition-all font-mono text-lg text-white appearance-none"
+                                        required
+                                    />
+                                </div>
+                            </div>
                         </div>
                         <button
                             type="submit"
-                            disabled={loading || !birthday}
+                            disabled={loading || !birthMonth || !birthDay || !birthYear}
                             className={`w-full py-4 font-bold tracking-[0.2em] transition-all duration-300 border relative z-20
                                 ${loading
                                     ? "bg-gray-800 border-gray-700 text-gray-500 cursor-not-allowed"
