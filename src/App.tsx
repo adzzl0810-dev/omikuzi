@@ -10,6 +10,7 @@ import { ZazenGuidePage } from './pages/ZazenGuidePage';
 import { AudioController } from './components/AudioController';
 import AboutPage from './pages/AboutPage';
 import LuckyItemPage from './pages/LuckyItemPage';
+import EmaHallPage from './pages/EmaHallPage';
 
 import AnimatedSignIn from './components/ui/AnimatedSignIn';
 
@@ -34,6 +35,7 @@ function App() {
                         <Route path="/" element={<HomePage />} />
                         <Route path="/about" element={<AboutPage />} />
                         <Route path="/lucky-item" element={<LuckyItemPage />} />
+                        <Route path="/ema" element={<EmaHallPage />} />
                         <Route path="/columns" element={<ColumnsPage />} />
                         <Route path="/columns/:id" element={<ArticleDetailPage />} />
                         <Route path="/archives" element={<ArchivesPage />} />

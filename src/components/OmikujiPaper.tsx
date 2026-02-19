@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { OmikujiResult } from '../services/gemini';
 import { BackgroundCircles } from './ui/background-circles';
 import { KikyoMon } from './icons/KikyoMon';
 import { Download } from 'lucide-react';
-import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ExternalLink } from 'lucide-react';
 import { getAmazonSearchUrl } from '../utils/affiliate';
+import { ShrineSeal } from './ui/ShrineSeal';
 
 interface OmikujiPaperProps {
     result: OmikujiResult;
@@ -19,45 +18,20 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
     const [showToast, setShowToast] = useState(false);
     const paperRef = React.useRef<HTMLDivElement>(null);
 
-    // ... (keep handleDownloadImage and handleShare same)
-
     const handleDownloadImage = async () => {
         if (!paperRef.current) return;
-
         try {
             const html2canvas = (await import('html2canvas')).default;
             const canvas = await html2canvas(paperRef.current, {
-                scale: 2, // High resolution
-                backgroundColor: null,
-                useCORS: true // Essential for god images if external
+                scale: 2,
+                backgroundColor: '#FCF9F2',
+                useCORS: true
             });
-
             const image = canvas.toDataURL("image/png");
-
-            // Create download link
             const link = document.createElement('a');
             link.href = image;
             link.download = `street-spirit-omikuji-${new Date().toISOString().split('T')[0]}.png`;
             link.click();
-
-            // Optional: Also try to share if on mobile
-            if (navigator.share) {
-                canvas.toBlob(async (blob) => {
-                    if (blob) {
-                        const file = new File([blob], 'omikuji.png', { type: 'image/png' });
-                        try {
-                            await navigator.share({
-                                files: [file],
-                                title: 'My Omikuji',
-                                text: `I drew ${result.fortune} at Street Spirit.`
-                            });
-                        } catch (e) {
-                            console.log('Share failed or cancelled', e);
-                        }
-                    }
-                });
-            }
-
         } catch (err) {
             console.error('Failed to capture image:', err);
             alert("Could not generate image. Please screenshot manually.");
@@ -65,7 +39,7 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
     };
 
     const handleShare = async () => {
-        const text = `✨ My Spirit Guide: ${result.god_name}\n🔮 Destiny: ${result.fortune}\n\nDiscover your digital deity at Street Spirit. #DigitalSanctuary`;
+        const text = `✨ 守護神: ${result.god_name}\n🔮 運勢: ${result.fortune}\n\n電子神社「Street Spirit」で神託を授かりました。\n#StreetSpirit #電子神籤`;
         const url = window.location.origin;
 
         if (navigator.share) {
@@ -84,7 +58,7 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
                 setShowToast(true);
                 setTimeout(() => setShowToast(false), 3000);
             } catch (err) {
-                console.error('Failed to copy API', err);
+                console.error('Failed to copy', err);
                 window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
             }
         }
@@ -94,117 +68,102 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
         <div className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 py-20 text-jap-indigo overflow-hidden font-serif">
             {/* Background Effects */}
             <div className="absolute inset-0 z-0 bg-shinto-white">
-                <BackgroundCircles variant="primary" /> {/* Changed variant to primary (lighter) */}
+                <BackgroundCircles variant="primary" />
             </div>
 
             {/* The Paper (Washi) */}
-            <div ref={paperRef} className="relative z-10 w-full max-w-2xl bg-[#FCF9F2] p-8 md:p-16 shadow-2xl min-h-[800px] flex flex-col items-center border-y-8 border-double border-jap-vermilion/50">
+            <div ref={paperRef} className="relative z-10 w-full max-w-2xl bg-[#FCF9F2] p-8 md:p-16 shadow-2xl min-h-[900px] flex flex-col items-center border border-jap-gold-200">
                 {/* Texture Overlay */}
                 <div className="absolute inset-0 pointer-events-none opacity-20 bg-[url('https://www.transparenttextures.com/patterns/rice-paper-2.png')]" />
 
-                {/* Corners */}
-                <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-jap-gold-300 opacity-50"></div>
-                <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-jap-gold-300 opacity-50"></div>
-                <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-jap-gold-300 opacity-50"></div>
-                <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-jap-gold-300 opacity-50"></div>
-
                 {/* Header Section */}
-                <div className="flex w-full justify-between items-start mb-12 border-b border-jap-gold-300 pb-6">
+                <div className="flex w-full justify-between items-center mb-12 border-b-2 border-jap-vermilion pb-6">
                     <div className="flex flex-col">
-                        <span className="text-xs font-sans font-bold text-jap-gold-500 tracking-widest uppercase mb-1">Divine Oracle</span>
-                        <h1 className="text-2xl font-serif font-bold text-jap-indigo tracking-[0.3em]">御神籤</h1>
+                        <h1 className="text-3xl font-serif font-bold text-jap-indigo tracking-[0.5em] writing-vertical-rl">御神籤</h1>
                     </div>
                     <div className="text-right flex flex-col items-end">
-                        <div className="text-5xl md:text-6xl font-serif font-black text-jap-vermilion tracking-widest drop-shadow-sm leading-none">
-                            {result.fortune.split(' ')[0]}
+                        <div className="text-6xl font-serif font-black text-jap-vermilion tracking-widest drop-shadow-sm leading-none whitespace-pre-line">
+                            {result.fortune.replace(' ', '\n')}
                         </div>
-                        <div className="text-sm text-jap-gold-600 font-bold uppercase mt-2 tracking-widest">{result.fortune.split(' ').slice(1).join(' ')}</div>
                     </div>
                 </div>
 
-                {/* God Image & Name */}
-                <div className="flex flex-col items-center gap-6 mb-12 w-full">
-                    {godImage ? (
-                        <div className="relative w-56 h-72 border-8 border-white shadow-xl hover:rotate-1 transition-transform duration-700 bg-gray-100">
-                            {/* Frame Inner */}
-                            <div className="absolute inset-0 border border-black/10 z-10 pointer-events-none"></div>
-                            <img src={godImage} alt={result.god_name} className="w-full h-full object-cover" />
+                {/* Main Content Area: Traditional Grid Layout */}
+                <div className="w-full flex flex-col md:flex-row gap-12 items-start mb-12">
+                    {/* Left side: Waka (Vertical) */}
+                    <div className="w-full md:w-1/3 flex flex-col items-center">
+                        <div className="bg-white/40 p-6 border-x border-jap-gold-300 min-h-[400px] flex items-center justify-center">
+                            <p className="text-2xl font-serif text-jap-indigo leading-loose tracking-[0.2em] writing-vertical-rl h-[350px]">
+                                {result.waka.text}
+                            </p>
                         </div>
-                    ) : (
-                        <div className="relative w-40 h-40 flex items-center justify-center">
-                            <div className="absolute inset-0 bg-jap-gold-100 rounded-full animate-pulse blur-xl"></div>
-                            <div className="relative w-32 h-32 bg-jap-indigo text-jap-gold-300 rounded-full flex items-center justify-center border-4 border-jap-gold-300 shadow-lg">
-                                <span className="text-6xl font-serif font-bold pt-2 select-none">
-                                    {result.god_name.charAt(0)}
-                                </span>
+                        <p className="mt-4 text-[10px] text-jap-gold-500 uppercase tracking-widest italic">Divine Poem</p>
+                    </div>
+
+                    {/* Right side: God and Meaning */}
+                    <div className="w-full md:w-2/3 space-y-8">
+                        {godImage && (
+                            <div className="relative w-full aspect-[4/5] border border-jap-gold-200 shadow-lg overflow-hidden group">
+                                <img src={godImage} alt={result.god_name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                             </div>
+                        )}
+
+                        <div className="border-l-4 border-jap-vermilion pl-6 py-2">
+                            <h3 className="text-xl font-bold text-jap-indigo tracking-widest mb-2">
+                                {result.god_name}
+                            </h3>
+                            <p className="text-sm text-gray-600 leading-relaxed italic">
+                                {result.waka.meaning}
+                            </p>
                         </div>
-                    )}
-                    <div className="text-center">
-                        <div className="text-xs text-jap-gold-500 uppercase tracking-[0.3em] mb-2">Guardian Spirit</div>
-                        <h3 className="text-2xl font-bold text-jap-indigo tracking-widest border-b-2 border-jap-vermilion/30 pb-2 inline-block">
-                            {result.god_name}
-                        </h3>
-                    </div>
-                </div>
 
-                {/* Waka (Poem) */}
-                <div className="w-full bg-white/60 p-8 mb-12 relative">
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-jap-gold-300"></div>
-                    <p className="text-xl font-serif text-jap-indigo mb-4 leading-loose italic tracking-wide text-center">
-                        "{result.waka.text}"
-                    </p>
-                    <p className="text-sm text-jap-violet font-sans text-right uppercase tracking-wider opacity-80">
-                        — The Spirit's Voice
-                    </p>
-                    <div className="mt-4 pt-4 border-t border-jap-gold-200 text-sm text-gray-600 leading-relaxed text-justify">
-                        {result.waka.meaning}
-                    </div>
-                </div>
-
-                {/* Detailed Advice Grid */}
-                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-sm md:text-base text-gray-700">
-                    {[
-                        { label: "Wish (願望)", val: result.advice.wish },
-                        { label: "Love (恋愛)", val: result.advice.love },
-                        { label: "Connection (待ち人)", val: result.advice.waiting_person },
-                        { label: "Work (商売)", val: result.advice.business },
-                        { label: "Wisdom (学問)", val: result.advice.studies },
-                        { label: "Journey (旅立ち)", val: result.advice.travel },
-                        { label: "Lost Items (失せ物)", val: result.advice.lost_item },
-                        {
-                            label: "Lucky Key (幸運鍵)", val: (
-                                <a
-                                    href={getAmazonSearchUrl(result.lucky_item)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-1 hover:text-jap-vermilion transition-colors group/link"
-                                    title={`Shop for ${result.lucky_item} on Amazon`}
-                                >
-                                    <span className="underline decoration-jap-gold-300 underline-offset-4 group-hover/link:decoration-jap-vermilion">{result.lucky_item}</span>
-                                    <ExternalLink size={12} className="opacity-50 group-hover/link:opacity-100" />
-                                </a>
-                            )
-                        },
-                    ].map((item, i) => (
-                        <div key={i} className="border-b border-jap-gold-200 pb-2 group">
-                            <span className="font-bold text-jap-vermilion block text-xs uppercase tracking-[0.2em] mb-1 group-hover:text-jap-gold-500 transition-colors">{item.label}</span>
-                            <span className="leading-relaxed">{item.val}</span>
+                        {/* Advice Items */}
+                        <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-sm border-t border-jap-gold-200 pt-6">
+                            {[
+                                { label: "願望", val: result.advice.wish },
+                                { label: "恋愛", val: result.advice.love },
+                                { label: "待人", val: result.advice.waiting_person },
+                                { label: "学問", val: result.advice.studies },
+                            ].map((item, i) => (
+                                <div key={i} className="flex flex-col gap-1">
+                                    <span className="text-[10px] font-bold text-jap-vermilion uppercase tracking-widest">{item.label}</span>
+                                    <span className="text-jap-indigo font-medium">{item.val}</span>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
                 </div>
 
-                {/* Footer Stamp - Red Seal */}
-                <div className="mt-16 opacity-80 mix-blend-multiply">
-                    <div className="w-24 h-24 border-4 border-jap-vermilion rounded-lg flex items-center justify-center rotate-[-5deg]">
-                        <span className="text-jap-vermilion font-serif font-bold text-xl writing-vertical-rl tracking-widest">電子神社</span>
+                {/* Lucky Item Section */}
+                <div className="w-full bg-jap-indigo/5 p-6 border border-jap-gold-200/50 mb-12">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <span className="text-[10px] font-bold text-jap-gold-600 uppercase tracking-widest block mb-1">Lucky Key (幸運の鍵)</span>
+                            <span className="text-lg font-bold text-jap-indigo">{result.lucky_item}</span>
+                        </div>
+                        <a
+                            href={getAmazonSearchUrl(result.lucky_item)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 bg-white px-4 py-2 border border-jap-gold-300 rounded text-xs font-bold hover:bg-jap-gold-100 transition-colors"
+                        >
+                            Amazon <span>&rarr;</span>
+                        </a>
                     </div>
+                </div>
+
+                {/* Footer Stamp - The New ShrineSeal */}
+                <div className="w-full flex justify-end items-end mt-4">
+                    <div className="text-right mr-4 mb-4">
+                        <p className="text-[10px] font-serif opacity-40">Street Spirit Shrine</p>
+                        <p className="text-[10px] font-serif opacity-40">Digital Sanctuary Alpha</p>
+                    </div>
+                    <ShrineSeal className="opacity-90" />
                 </div>
             </div>
 
             <div className="mt-16 flex flex-col items-center gap-6 relative z-20 w-full max-w-md mx-auto">
-                {/* Share Button - Primary Action for Growth */}
-                {/* Share Button - Primary Action for Growth */}
                 <div className="w-full flex gap-4">
                     <button
                         onClick={handleShare}
@@ -216,7 +175,7 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
 
                     <button
                         onClick={() => {
-                            const text = `✨ My Spirit Guide: ${result.god_name}\n🔮 Destiny: ${result.fortune}\n\nDiscover your digital deity at Street Spirit. #DigitalSanctuary`;
+                            const text = `✨ 守護神: ${result.god_name}\n🔮 運勢: ${result.fortune}\n\n電子神社「Street Spirit」で神託を授かりました。\n#StreetSpirit #電子神籤`;
                             const url = window.location.origin;
                             window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
                         }}
@@ -256,7 +215,6 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
                 </button>
             </div>
 
-            {/* Related Content / Further Guidance - Phase 10 */}
             <div className="mt-24 max-w-4xl w-full px-4 relative z-10">
                 <div className="text-center mb-8">
                     <span className="text-jap-vermilion font-bold tracking-[0.2em] uppercase text-xs block mb-2">
