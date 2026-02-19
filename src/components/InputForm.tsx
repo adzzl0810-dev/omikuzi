@@ -72,6 +72,9 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, hasCr
                             * An offering of ¥100 (approx. $1) is required.
                         </p>
                     )}
+                    <p className="text-[10px] text-gray-500 mt-2 italic">
+                        * For entertainment purposes only. No liability assumed.
+                    </p>
                 </div>
 
                 <motion.button

@@ -24,8 +24,8 @@ export interface OmikujiResult {
     business: string; // Akinai
     studies: string; // Gakumon
     love: string; // Renai
-    moving: string; // Yautsuria
-    illness: string; // Byoki
+    housing: string; // Yautsuria (renamed from moving)
+    health: string; // Byoki (renamed from illness)
     proposal: string; // Engidan
   };
   lucky_item: string;
@@ -42,7 +42,8 @@ export const generateFortune = async (userInput: string): Promise<OmikujiResult>
     A user has come to you with the following worry or thought: "${userInput}".
     
     Generate a unique "Omikuji" (fortune) for them.
-    The tone should be "Mystical, Serene, yet Modern" (Digital Shinto vibe).
+    The tone should be "Mystical, Serene, Traditional yet Modern" (Digital Shinto vibe).
+    The advice should be specific, profound, and helpful, not generic.
     
     **CRITICAL**: The output must be readable for overseas people (English main).
     **CRITICAL**: ALL fields (fortune, god_name, advice values, lucky_item) MUST be in English.
@@ -50,25 +51,25 @@ export const generateFortune = async (userInput: string): Promise<OmikujiResult>
 
     Return ONLY a valid JSON object with the following structure:
     {
-      "fortune": "String (e.g., 'DAIKICHI (Great Blessing)', 'KYO (Curse)', 'CHUKICHI (Middle Blessing)')",
-      "god_name": "String (A creative English name for a Personified Deity, e.g., 'Goddess of Cleansing Rain', 'Spirit Guardian of New Beginnings')",
+      "fortune": "String (e.g. 'DAIKICHI (Great Blessing)', 'UKICHI (Blessing)', 'KICHI (Good Fortune)', 'SHOKICHI (Small Blessing)', 'SUEKICHI (Future Blessing)', 'KYO (Curse)')",
+      "god_name": "String (A creative English name for a Personified Deity, e.g. 'Goddess of Cleansing Rain', 'Spirit Guardian of New Beginnings')",
       "waka": {
         "text": "String (A mystical short poem/haiku in Japanese - for atmosphere)",
-        "meaning": "String (English translation/interpretation of the poem - this is what they will read)"
+        "meaning": "String (A poetic English interpretation of the poem. It should sound like ancient wisdom.)"
       },
       "advice": {
-        "wish": "String (English advice on their wish/desire)",
-        "waiting_person": "String (English advice on waiting person)",
-        "lost_item": "String (English advice on lost things)",
-        "travel": "String (English advice on travel)",
-        "business": "String (English advice on business)",
-        "studies": "String (English advice on studies)",
-        "love": "String (English advice on relationships)",
-        "moving": "String (English advice on moving)",
-        "illness": "String (English advice on health)",
-        "proposal": "String (English advice on marriage)"
+        "wish": "String (Wishes / Negai-goto: Advice on whether the wish will come true. e.g. 'It will come true if you remain patient.')",
+        "love": "String (Love / Ren-ai: Advice on love and relationships. e.g. 'Do not rush. The right person is near.')",
+        "waiting_person": "String (Waiting Person / Machibito: Advice on someone you are waiting for or a destined meeting. e.g. 'They will come late.')",
+        "business": "String (Business / Akinai: Advice on work, business, or profit. e.g. 'Do not seek immediate gain.')",
+        "studies": "String (Studies / Gakumon: Advice on learning and exams. e.g. 'Focus on the basics.')",
+        "health": "String (Health / Byoki: Advice on health and recovery. e.g. 'Recovery may be slow but certain.')",
+        "housing": "String (Housing & Moving / Yautsuria: Advice on moving or home improvement. e.g. 'West is a good direction.')",
+        "travel": "String (Travel / Tabidachi: Advice on trips or new journeys. e.g. 'A sudden trip brings good luck.')",
+        "proposal": "String (Marriage Proposal / Engidan: Advice on marriage. e.g. 'Proceed with a sincere heart.')",
+        "lost_item": "String (Lost Items / Usemono: Advice on finding lost things. e.g. 'It will be found in a low place.')"
       },
-      "lucky_item": "String (A modern or traditional item in English, e.g., 'Crystal Bead', 'Old Smartphone')"
+      "lucky_item": "String (A modern or traditional item in English, e.g. 'Crystal Bead', 'Old Smartphone')"
     }
   `;
 

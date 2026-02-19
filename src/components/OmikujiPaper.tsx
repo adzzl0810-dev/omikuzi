@@ -124,7 +124,13 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
                                 { label: "WISH", val: result.advice.wish },
                                 { label: "LOVE", val: result.advice.love },
                                 { label: "WAITING", val: result.advice.waiting_person },
+                                { label: "BUSINESS", val: result.advice.business },
                                 { label: "STUDIES", val: result.advice.studies },
+                                { label: "HEALTH", val: result.advice.health },
+                                { label: "HOUSING", val: result.advice.housing },
+                                { label: "TRAVEL", val: result.advice.travel },
+                                { label: "PROPOSAL", val: result.advice.proposal },
+                                { label: "LOST ITEM", val: result.advice.lost_item },
                             ].map((item, i) => (
                                 <div key={i} className="flex flex-col gap-1">
                                     <span className="text-[10px] font-bold text-jap-vermilion uppercase tracking-widest">{item.label}</span>
