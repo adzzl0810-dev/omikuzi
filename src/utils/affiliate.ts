@@ -3,7 +3,7 @@
  */
 
 export const getAmazonAffiliateTag = (): string => {
-    return import.meta.env.VITE_AMAZON_ASSOCIATE_TAG || 'demo-22';
+    return import.meta.env.VITE_AMAZON_ASSOCIATE_TAG || '';
 };
 
 export const getAmazonSearchUrl = (keyword: string): string => {

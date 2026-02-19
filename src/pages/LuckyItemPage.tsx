@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { WagaraBackground } from '../components/WagaraBackground';
 import { KamiParticles } from '../components/KamiParticles';
 import { ShoppingBag, Sparkles } from 'lucide-react';
+import { getAmazonSearchUrl } from '../utils/affiliate';
 
 // Simplified lucky items list
 const LUCKY_ITEMS = [
@@ -43,7 +44,7 @@ const LuckyItemPage: React.FC = () => {
     };
 
     const amazonLink = result
-        ? `https://www.amazon.com/s?k=${encodeURIComponent(result.en)}&tag=${import.meta.env.VITE_AMAZON_ASSOCIATE_TAG || ''}`
+        ? getAmazonSearchUrl(result.en)
         : '#';
 
     // Debug logging
