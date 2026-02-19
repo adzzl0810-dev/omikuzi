@@ -5,23 +5,29 @@ import { KikyoMon } from './icons/KikyoMon';
 interface InputFormProps {
     onSubmit: (input: string) => void;
     isLoading: boolean;
+    hasCredits?: boolean;
 }
 
-export const InputForm: React.FC<InputFormProps> = ({ onSubmit: _onSubmit, isLoading }) => {
+export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, hasCredits = false }) => {
     const [input, setInput] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (input.trim() && !isLoading) {
-            // Save worry to session storage for retrieval after payment
-            sessionStorage.setItem('pending_worry', input);
-
-            // Redirect to Stripe
-            const paymentLink = import.meta.env.VITE_STRIPE_PAYMENT_LINK;
-            if (paymentLink) {
-                window.location.href = paymentLink;
+            if (hasCredits) {
+                // If user has credits, just submit (HomePage handles the rest)
+                onSubmit(input);
             } else {
-                alert("Payment link not configured. Please contact the shrine.");
+                // Save worry to session storage for retrieval after payment
+                sessionStorage.setItem('pending_worry', input);
+
+                // Redirect to Stripe
+                const paymentLink = import.meta.env.VITE_STRIPE_PAYMENT_LINK;
+                if (paymentLink) {
+                    window.location.href = paymentLink;
+                } else {
+                    alert("Payment link not configured. Please contact the shrine.");
+                }
             }
         }
     };
@@ -57,9 +63,15 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit: _onSubmit, isLoa
                 </div>
 
                 <div className="text-center mb-4">
-                    <p className="text-sm font-sans font-medium text-jap-gold-300">
-                        * An offering of ¥100 (approx. $1) is required.
-                    </p>
+                    {hasCredits ? (
+                        <p className="text-sm font-bold text-neon-cyan uppercase tracking-widest animate-pulse">
+                            * 1 Credit Available (No Payment Required)
+                        </p>
+                    ) : (
+                        <p className="text-sm font-sans font-medium text-jap-gold-300">
+                            * An offering of ¥100 (approx. $1) is required.
+                        </p>
+                    )}
                 </div>
 
                 <motion.button
@@ -70,7 +82,9 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit: _onSubmit, isLoa
                     className={`w-full py-4 font-bold text-lg tracking-widest uppercase transition-all duration-300 relative overflow-hidden group 
                         ${isLoading || !input.trim()
                             ? 'bg-gray-800 text-gray-500 cursor-not-allowed border-gray-700'
-                            : 'bg-jap-vermilion text-white border border-jap-vermilion hover:bg-jap-vermilion/80 hover:shadow-[0_0_20px_rgba(255,51,51,0.5)]'
+                            : hasCredits
+                                ? 'bg-neon-cyan/20 text-neon-cyan border border-neon-cyan hover:bg-neon-cyan hover:text-black hover:shadow-[0_0_20px_#0ff]'
+                                : 'bg-jap-vermilion text-white border border-jap-vermilion hover:bg-jap-vermilion/80 hover:shadow-[0_0_20px_rgba(255,51,51,0.5)]'
                         } border`}
                 >
                     {isLoading ? (
@@ -79,7 +93,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit: _onSubmit, isLoa
                             CONNECTING...
                         </span>
                     ) : (
-                        <span>OFFER & PAY</span>
+                        <span>{hasCredits ? 'REVEAL (USE CREDIT)' : 'OFFER & PAY'}</span>
                     )}
                 </motion.button>
             </form>

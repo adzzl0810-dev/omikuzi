@@ -101,10 +101,19 @@ export const HomePage: React.FC = () => {
         setShowInputForm(true);
     };
 
+    const [credits, setCredits] = useState(0);
+
+    useEffect(() => {
+        if (user) {
+            userService.getUserCredits(user.id).then(setCredits);
+        } else {
+            setCredits(0);
+        }
+    }, [user, showInputForm]); // Refresh credits when form opens just in case
+
     const handleGenerate = async (input: string, isPaid: boolean = false) => {
         if (!user) {
             alert("Connecting to the Spiritual Network... (Authenticating)");
-            // In a real flow, we might force login here or allow anon with local storage
             return;
         }
 
@@ -113,26 +122,37 @@ export const HomePage: React.FC = () => {
         setGodImage(null);
 
         try {
-            // 1. Generate Fortune Analysis
-            const [fortune] = await Promise.all([
-                generateFortune(input),
-                new Promise(resolve => setTimeout(resolve, 4500))
-            ]);
+            // Check if we can use a credit (Server-side Generation)
+            if (credits > 0) {
+                console.log("Generating with Credit...");
+                const result = await userService.generateFortuneEdge(input);
+                setResult(result);
+                // Refresh credits
+                userService.getUserCredits(user.id).then(setCredits);
+            }
+            // Legacy/Fallback Client-side Generation (Only if isPaid=true passed from valid return flow, OR if free readings allowed? No, we pay-wall.)
+            else {
+                // If they reached here without credits, it means they MUST have just returned from Stripe with isPaid=true.
+                // Or there is a logic error.
+                // In the future, we should probably remove client-side generation entirely to enforce Phase 2 security.
+                // But for now, let's keep it as fallback for the "Redirect Return" flow if credits failed to hook.
 
-            // 2. Perform Secure Reading Transaction (RPC)
-            // This handles DB insert && user count increment in one go
-            // Determine amount (Mocking $1.00 for now if paid)
-            const amount = isPaid ? 1.00 : 0;
-            await userService.performReading(input, fortune, null, isPaid, amount);
+                // 1. Generate Fortune Analysis
+                const [fortune] = await Promise.all([
+                    generateFortune(input),
+                    new Promise(resolve => setTimeout(resolve, 4500))
+                ]);
 
-            setResult(fortune);
+                // 2. Perform Secure Reading Transaction (RPC)
+                const amount = isPaid ? 1.00 : 0;
+                await userService.performReading(input, fortune, null, isPaid, amount);
 
-            // 3. (Legacy Image Logic Removed)
+                setResult(fortune);
+            }
         } catch (error: any) {
             console.error(error);
             const msg = error.message || "Unknown Error";
             alert(`The Spirits are silent... (API Error: ${msg})`);
-            // Set error state to display in UI (need to add state variable first)
         } finally {
             setLoading(false);
         }
@@ -242,7 +262,7 @@ export const HomePage: React.FC = () => {
             {/* 5. Input Form (Worry) */}
             {showInputForm && (
                 <div ref={inputRef} className="relative z-10 min-h-[80vh] flex flex-col items-center justify-center gap-8 pb-32">
-                    <InputForm onSubmit={handleGenerate} isLoading={loading} />
+                    <InputForm onSubmit={handleGenerate} isLoading={loading} hasCredits={credits > 0} />
                     {loading && (
                         <div className="absolute inset-x-0 bottom-0 top-0 z-20 flex items-center justify-center bg-black/80 backdrop-blur-md transition-all duration-500">
                             <OmikujiBox />

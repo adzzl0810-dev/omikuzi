@@ -99,5 +99,34 @@ export const userService = {
     // Deprecated: Is now handled inside performReading RPC
     async saveReading(_userId: string, _input: string, _result: any, _godImageUrl: string | null): Promise<void> {
         console.warn('saveReading is deprecated. Use performReading.');
+    },
+
+    async getUserCredits(userId: string): Promise<number> {
+        // Casting to any to avoid TS error with manual type definition if it fails to resolve
+        const { data, error } = await (supabase as any)
+            .from('user_credits')
+            .select('credits')
+            .eq('user_id', userId)
+            .single();
+
+        if (error) {
+            // If row doesn't exist (no credits ever), treat as 0
+            if (error.code === 'PGRST116') return 0;
+            console.error('Error fetching credits:', error);
+            return 0;
+        }
+        return data?.credits || 0;
+    },
+
+    async generateFortuneEdge(input: string): Promise<any> {
+        const { data, error } = await supabase.functions.invoke('generate-fortune', {
+            body: { input }
+        });
+
+        if (error) {
+            console.error('Edge Function Error:', error);
+            throw new Error(`Oracle Error: ${error.message}`);
+        }
+        return data; // Returns the full fortune object
     }
 };
