@@ -43,7 +43,7 @@ const LuckyItemPage: React.FC = () => {
     };
 
     const amazonLink = result
-        ? `https://www.amazon.co.jp/s?k=${encodeURIComponent(result.name)}&tag=adzzl-22`
+        ? `https://www.amazon.com/s?k=${encodeURIComponent(result.en)}&tag=${import.meta.env.VITE_AMAZON_ASSOCIATE_TAG || ''}`
         : '#';
 
     return (
@@ -78,7 +78,7 @@ const LuckyItemPage: React.FC = () => {
                     <form onSubmit={handleCalculate} className="space-y-6">
                         <div>
                             <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2">
-                                Date of Birth (生年月日)
+                                Date of Birth
                             </label>
                             <input
                                 type="date"
@@ -114,8 +114,8 @@ const LuckyItemPage: React.FC = () => {
                         <Sparkles className="w-12 h-12 text-jap-gold-300 mx-auto mb-4 animate-pulse" />
 
                         <h3 className="text-gray-400 text-xs uppercase tracking-widest mb-2">Your Guardian Object</h3>
-                        <h2 className="text-3xl font-bold text-white mb-2 font-display">{result.name}</h2>
-                        <p className="text-neon-cyan font-mono text-sm mb-8">{result.en}</p>
+                        <h2 className="text-3xl font-bold text-white mb-2 font-display">{result.en}</h2>
+                        <p className="text-neon-cyan font-mono text-sm mb-8">{result.name}</p>
 
                         <a
                             href={amazonLink}
@@ -124,11 +124,11 @@ const LuckyItemPage: React.FC = () => {
                             className="inline-flex items-center gap-2 bg-[#FF9900] text-black font-bold py-3 px-8 rounded-full hover:bg-[#ffad33] transition-colors shadow-lg hover:shadow-xl"
                         >
                             <ShoppingBag size={20} />
-                            Amazonで探す
+                            Find on Amazon
                         </a>
 
                         <p className="mt-4 text-[10px] text-gray-500">
-                            ※ Amazonアソシエイト・プログラムを利用しています
+                            * Uses Amazon Associate Program
                         </p>
                     </motion.div>
                 )}

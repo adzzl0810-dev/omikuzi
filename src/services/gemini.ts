@@ -45,29 +45,30 @@ export const generateFortune = async (userInput: string): Promise<OmikujiResult>
     The tone should be "Mystical, Serene, yet Modern" (Digital Shinto vibe).
     
     **CRITICAL**: The output must be readable for overseas people (English main).
-    **CRITICAL**: The "God" must be an "Anthropomorphized Yaoyorozu no Kami" (Personified natural phenomenon or concept).
+    **CRITICAL**: ALL fields (fortune, god_name, advice values, lucky_item) MUST be in English.
+    **CRITICAL**: The "god_name" must be an "Anthropomorphized Yaoyorozu no Kami" (Personified natural phenomenon or concept) with an English title.
 
     Return ONLY a valid JSON object with the following structure:
     {
       "fortune": "String (e.g., 'DAIKICHI (Great Blessing)', 'KYO (Curse)', 'CHUKICHI (Middle Blessing)')",
-      "god_name": "String (A creative name for a Personified Deity based on their worry, e.g., 'Goddess of Cleansing Rain', 'Spirit Guardian of New Beginnings')",
+      "god_name": "String (A creative English name for a Personified Deity, e.g., 'Goddess of Cleansing Rain', 'Spirit Guardian of New Beginnings')",
       "waka": {
-        "text": "String (A mystical short poem/haiku in Japanese)",
-        "meaning": "String (English translation/interpretation of the poem)"
+        "text": "String (A mystical short poem/haiku in Japanese - for atmosphere)",
+        "meaning": "String (English translation/interpretation of the poem - this is what they will read)"
       },
       "advice": {
-        "wish": "String (Advice on their wish/desire)",
-        "waiting_person": "String (Will the person they wait for come?)",
-        "lost_item": "String (Where to look for lost things)",
-        "travel": "String (Is it safe to travel?)",
-        "business": "String (Profit or loss?)",
-        "studies": "String (Success or failure?)",
-        "love": "String (Advice on relationships)",
-        "moving": "String (Good or bad to move?)",
-        "illness": "String (Recovery or caution needed?)",
-        "proposal": "String (Marriage/Partnership advice)"
+        "wish": "String (English advice on their wish/desire)",
+        "waiting_person": "String (English advice on waiting person)",
+        "lost_item": "String (English advice on lost things)",
+        "travel": "String (English advice on travel)",
+        "business": "String (English advice on business)",
+        "studies": "String (English advice on studies)",
+        "love": "String (English advice on relationships)",
+        "moving": "String (English advice on moving)",
+        "illness": "String (English advice on health)",
+        "proposal": "String (English advice on marriage)"
       },
-      "lucky_item": "String (A modern or traditional item, e.g., 'Crystal Bead', 'Old Smartphone', 'White Handkerchief')"
+      "lucky_item": "String (A modern or traditional item in English, e.g., 'Crystal Bead', 'Old Smartphone')"
     }
   `;
 

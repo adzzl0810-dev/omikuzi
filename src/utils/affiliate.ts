@@ -8,10 +8,10 @@ export const getAmazonAffiliateTag = (): string => {
 
 export const getAmazonSearchUrl = (keyword: string): string => {
     const tag = getAmazonAffiliateTag();
-    const baseUrl = 'https://www.amazon.co.jp/s';
+    const baseUrl = 'https://www.amazon.com/s';
 
     // Create URL search params using 'k' for keyword and 'tag' for associate tag
-    // Example: https://www.amazon.co.jp/s?k=Daruma&tag=demo-22
+    // Example: https://www.amazon.com/s?k=Daruma&tag=demo-22
     const params = new URLSearchParams();
     params.set('k', keyword);
     params.set('tag', tag);

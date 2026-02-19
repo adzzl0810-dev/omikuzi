@@ -39,7 +39,7 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
     };
 
     const handleShare = async () => {
-        const text = `✨ 守護神: ${result.god_name}\n🔮 運勢: ${result.fortune}\n\n電子神社「Street Spirit」で神託を授かりました。\n#StreetSpirit #電子神籤`;
+        const text = `✨ Guardian: ${result.god_name}\n🔮 Fortune: ${result.fortune}\n\nReceived an oracle at Digital Shrine 'Street Spirit'.\n#StreetSpirit #DigitalOracle`;
         const url = window.location.origin;
 
         if (navigator.share) {
@@ -121,10 +121,10 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
                         {/* Advice Items */}
                         <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-sm border-t border-jap-gold-200 pt-6">
                             {[
-                                { label: "願望", val: result.advice.wish },
-                                { label: "恋愛", val: result.advice.love },
-                                { label: "待人", val: result.advice.waiting_person },
-                                { label: "学問", val: result.advice.studies },
+                                { label: "WISH", val: result.advice.wish },
+                                { label: "LOVE", val: result.advice.love },
+                                { label: "WAITING", val: result.advice.waiting_person },
+                                { label: "STUDIES", val: result.advice.studies },
                             ].map((item, i) => (
                                 <div key={i} className="flex flex-col gap-1">
                                     <span className="text-[10px] font-bold text-jap-vermilion uppercase tracking-widest">{item.label}</span>
@@ -139,7 +139,7 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
                 <div className="w-full bg-jap-indigo/5 p-6 border border-jap-gold-200/50 mb-12">
                     <div className="flex items-center justify-between">
                         <div>
-                            <span className="text-[10px] font-bold text-jap-gold-600 uppercase tracking-widest block mb-1">Lucky Key (幸運の鍵)</span>
+                            <span className="text-[10px] font-bold text-jap-gold-600 uppercase tracking-widest block mb-1">Lucky Key</span>
                             <span className="text-lg font-bold text-jap-indigo">{result.lucky_item}</span>
                         </div>
                         <a
@@ -175,7 +175,7 @@ export const OmikujiPaper: React.FC<OmikujiPaperProps> = ({ result, godImage, on
 
                     <button
                         onClick={() => {
-                            const text = `✨ 守護神: ${result.god_name}\n🔮 運勢: ${result.fortune}\n\n電子神社「Street Spirit」で神託を授かりました。\n#StreetSpirit #電子神籤`;
+                            const text = `✨ Guardian: ${result.god_name}\n🔮 Fortune: ${result.fortune}\n\nReceived an oracle at Digital Shrine 'Street Spirit'.\n#StreetSpirit #DigitalOracle`;
                             const url = window.location.origin;
                             window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
                         }}

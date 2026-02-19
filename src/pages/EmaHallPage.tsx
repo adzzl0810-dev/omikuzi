@@ -32,7 +32,7 @@ const EmaHallPage: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         className="text-4xl md:text-5xl font-serif font-bold tracking-[0.4em] mb-4 text-white"
                     >
-                        電子絵馬掛所
+                        DIGITAL EMA HALL
                     </motion.h1>
                     <p className="text-sm font-sans tracking-[0.3em] uppercase text-jap-gold-300 opacity-70">
                         Digital Ema Hall — Floating Desires

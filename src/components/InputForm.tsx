@@ -39,7 +39,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit: _onSubmit, isLoa
             <h2 className="text-2xl font-bold text-white mb-6 text-center font-display tracking-wider">
                 INPUT YOUR <span className="text-neon-pink">WORRY</span>
                 <br />
-                <span className="text-sm font-sans font-normal opacity-70 text-gray-300">悩みを入力して神託を得る</span>
+                <span className="text-sm font-sans font-normal opacity-70 text-gray-300">Enter your worry to receive an oracle</span>
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -47,7 +47,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit: _onSubmit, isLoa
                     <textarea
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder="例：最近、仕事のモチベーションが上がらない..."
+                        placeholder="Ex: I'm feeling stuck in my career and need guidance..."
                         className="w-full h-32 bg-street-dark/80 border border-gray-600 rounded-lg p-4 text-white placeholder-gray-500 focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan transition-all resize-none font-mono"
                         disabled={isLoading}
                     />
@@ -58,7 +58,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit: _onSubmit, isLoa
 
                 <div className="text-center mb-4">
                     <p className="text-sm font-sans font-medium text-jap-gold-300">
-                        ※ おみくじを引くには 100円〜 のお賽銭（初穂料）が必要です
+                        * An offering of ¥100 (approx. $1) is required.
                     </p>
                 </div>
 
@@ -79,7 +79,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit: _onSubmit, isLoa
                             CONNECTING...
                         </span>
                     ) : (
-                        <span>OFFER & PAY (初穂料を納める)</span>
+                        <span>OFFER & PAY</span>
                     )}
                 </motion.button>
             </form>
