@@ -11,8 +11,8 @@ interface SEOHeadProps {
 }
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
-    title = "Street Spirit | Digital Sanctuary & Omikuji",
-    description = "A cyberpunk-infused digital sanctuary. Draw Omikuji, practice Zazen, and collect Goshuin in a neo-traditional space.",
+    title = "Street Spirit | Digital Sanctuary & Cyber Shrine",
+    description = "An interactive cyberpunk digital sanctuary. Type your worries to instantly purify them, draw AI Omikuji fortunes, practice Zazen, and collect wabi-sabi Goshuin stamps.",
     image = "/pwa-512x512.png",
     type = "website",
     path
@@ -27,6 +27,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
         "name": "Street Spirit",
         "url": "https://street-spirit.app",
         "description": description,
+        "keywords": "digital sanctuary, cyber shrine, online omikuji, AI fortune teller, cyberpunk aesthetic, digital zazen, mindfulness app, wabi-sabi, data cremation",
         "potentialAction": {
             "@type": "SearchAction",
             "target": "https://street-spirit.app/?q={search_term_string}",
