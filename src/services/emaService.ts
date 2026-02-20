@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase';
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 const STORAGE_KEY = 'street_spirit_ema_wishes';
 
 export interface EmaWish {
