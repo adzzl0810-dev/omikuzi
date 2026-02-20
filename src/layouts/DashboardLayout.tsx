@@ -11,7 +11,9 @@ import {
     BookOpen,
     LogIn,
     LogOut,
-    Sparkles
+    Sparkles,
+    ShieldCheck,
+    FileText
 } from "lucide-react";
 
 export const DashboardLayout = () => {
@@ -74,6 +76,20 @@ export const DashboardLayout = () => {
             href: "/columns",
             icon: (
                 <BookOpen className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+            ),
+        },
+        {
+            label: "Privacy Policy",
+            href: "/privacy",
+            icon: (
+                <ShieldCheck className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+            ),
+        },
+        {
+            label: "Terms of Service",
+            href: "/terms",
+            icon: (
+                <FileText className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
         },
     ];
