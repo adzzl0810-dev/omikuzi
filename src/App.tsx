@@ -11,6 +11,8 @@ import { AudioController } from './components/AudioController';
 import AboutPage from './pages/AboutPage';
 import LuckyItemPage from './pages/LuckyItemPage';
 import EmaHallPage from './pages/EmaHallPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { TermsOfServicePage } from './pages/TermsOfServicePage';
 
 import AnimatedSignIn from './components/ui/AnimatedSignIn';
 
@@ -42,6 +44,8 @@ function App() {
                         <Route path="/zazen" element={<ZazenPage />} />
                         <Route path="/zazen/guide" element={<ZazenGuidePage />} />
                         <Route path="/login" element={<AnimatedSignIn />} />
+                        <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                        <Route path="/terms" element={<TermsOfServicePage />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Route>
                 </Routes>

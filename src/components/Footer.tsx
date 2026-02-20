@@ -61,8 +61,8 @@ export const Footer: React.FC = () => {
                 <div className="text-xs text-stone-600 tracking-wider text-center flex flex-col md:flex-row gap-4 md:gap-8 items-center">
                     <span>&copy; {currentYear} Street Spirit. All rights reserved.</span>
                     <span className="hidden md:inline text-stone-700">|</span>
-                    <a href="#" className="hover:text-stone-400 transition-colors cursor-not-allowed" title="Coming Soon">Privacy Policy</a>
-                    <a href="#" className="hover:text-stone-400 transition-colors cursor-not-allowed" title="Coming Soon">Terms of Service</a>
+                    <Link to="/privacy" className="hover:text-stone-400 transition-colors">Privacy Policy</Link>
+                    <Link to="/terms" className="hover:text-stone-400 transition-colors">Terms of Service</Link>
                 </div>
             </div>
         </footer>
