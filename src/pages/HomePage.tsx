@@ -28,6 +28,7 @@ export const HomePage: React.FC = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [paymentLoading, setPaymentLoading] = useState(false);
+    const [isPaidRetry, setIsPaidRetry] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [result, setResult] = useState<OmikujiResult | null>(null);
     const [godImage, setGodImage] = useState<string | null>(null);
@@ -89,9 +90,7 @@ export const HomePage: React.FC = () => {
             // Execute
             handleGenerate(pendingWorry, true); // true = isPaid
 
-            // Cleanup
-            sessionStorage.removeItem('pending_worry');
-            // Remove query params to prevent re-trigger on refresh
+            // Cleanup URL but KEEP pending worry in case of error retry
             window.history.replaceState({}, document.title, window.location.pathname);
         }
     }, [user]); // Re-run when user auth is settled
@@ -152,12 +151,16 @@ export const HomePage: React.FC = () => {
                 const amount = isPaid ? 1.00 : 0;
                 await userService.performReading(input, fortune, null, isPaid, amount);
 
+                // Success: Clean up retry state and session storage
+                sessionStorage.removeItem('pending_worry');
+                setIsPaidRetry(false);
                 setResult(fortune);
             }
         } catch (error: any) {
             console.error(error);
             const msg = error.message || "Unknown Error";
             setErrorMsg(`Neural Network Interrupted: ${msg}. The Spirits apologize.`);
+            if (isPaid) setIsPaidRetry(true);
             setTimeout(() => setErrorMsg(null), 5000);
         } finally {
             setLoading(false);
@@ -170,6 +173,8 @@ export const HomePage: React.FC = () => {
         setGodImage(null);
         setErrorMsg(null);
         setPaymentLoading(false);
+        setIsPaidRetry(false);
+        sessionStorage.removeItem('pending_worry');
         setShowInputForm(false);
         setShowOffering(false);
         setShowTemizu(false);
@@ -271,7 +276,29 @@ export const HomePage: React.FC = () => {
             {/* 5. Input Form (Worry) */}
             {showInputForm && (
                 <div ref={inputRef} className="relative z-10 min-h-[100dvh] flex flex-col items-center justify-center gap-8 pt-16 pb-48 px-4">
-                    <InputForm onSubmit={handleGenerate} isLoading={loading} hasCredits={credits > 0} />
+                    {/* Retry Banner */}
+                    {isPaidRetry && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-jap-vermilion/20 border border-jap-vermilion/50 p-4 rounded text-center max-w-lg mb-4"
+                        >
+                            <p className="text-jap-vermilion text-sm font-bold tracking-wider mb-2">CONNECTION LOST</p>
+                            <p className="text-gray-300 text-xs mb-4">Your offering was received, but the connection to the spirits was interrupted. Please try again (no additional offering required).</p>
+                            <button
+                                onClick={() => handleGenerate(sessionStorage.getItem('pending_worry') || '', true)}
+                                className="px-6 py-2 bg-jap-vermilion hover:bg-jap-vermilion/80 text-white font-bold text-xs tracking-widest uppercase transition-colors"
+                            >
+                                Retry Ritual
+                            </button>
+                        </motion.div>
+                    )}
+
+                    {/* Hide regular form if we are in a paid retry state to avoid confusion */}
+                    {!isPaidRetry && (
+                        <InputForm onSubmit={handleGenerate} isLoading={loading} hasCredits={credits > 0} />
+                    )}
+
                     {loading && (
                         <div className="absolute inset-x-0 bottom-0 top-0 z-20 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md transition-all duration-500">
                             <OmikujiBox />
