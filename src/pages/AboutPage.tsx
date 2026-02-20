@@ -85,6 +85,34 @@ const AboutPage: React.FC = () => {
                             </p>
                         </div>
                     </motion.section>
+
+                    {/* Section 3: Mission & Promise (Donation) */}
+                    <motion.section
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.3 }}
+                        className="bg-black/60 backdrop-blur-md p-8 rounded-xl border border-jap-gold-300/30 relative overflow-hidden group shadow-[0_0_30px_rgba(202,175,108,0.1)]"
+                    >
+                        <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-transparent via-jap-gold-300/50 to-transparent opacity-50"></div>
+
+                        <h2 className="text-2xl font-bold mb-6 flex items-center justify-center gap-3 text-jap-gold-300">
+                            <span className="w-1 h-8 bg-jap-gold-300"></span>
+                            <span>Our Mission & Promise</span>
+                            <span className="w-1 h-8 bg-jap-gold-300"></span>
+                        </h2>
+                        <div className="leading-loose text-gray-300 space-y-4 font-sans text-center max-w-2xl mx-auto">
+                            <p>
+                                Street Spirit is an independent project built with a deep respect for Japanese Shinto culture.
+                            </p>
+                            <p className="text-white font-medium">
+                                As the creator, my personal goal is to donate <span className="text-jap-gold-300 text-lg font-bold">70%</span> of the profits generated from this app to organizations dedicated to preserving real shrines and nature in Japan.
+                            </p>
+                            <p className="text-sm text-gray-400 mt-6">
+                                By receiving your digital fortune today, you are supporting a solo developer's journey to give back to the tradition that inspired this space.
+                            </p>
+                        </div>
+                    </motion.section>
                 </div>
 
                 <motion.div
