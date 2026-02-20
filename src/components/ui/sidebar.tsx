@@ -164,12 +164,13 @@ export const SidebarLink = ({
     className?: string;
     props?: LinkProps; // Using react-router-dom LinkProps
 }) => {
-    const { open, animate } = useSidebar();
+    const { open, setOpen, animate } = useSidebar();
     return (
         <Link
             to={link.href}
+            onClick={() => setOpen(false)}
             className={cn(
-                "flex items-center justify-start gap-2 group/sidebar py-2",
+                "flex items-center justify-start gap-3 group/sidebar py-3 md:py-2 px-2 w-full",
                 className
             )}
             {...props}

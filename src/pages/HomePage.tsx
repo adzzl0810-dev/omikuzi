@@ -261,7 +261,7 @@ export const HomePage: React.FC = () => {
 
             {/* 5. Input Form (Worry) */}
             {showInputForm && (
-                <div ref={inputRef} className="relative z-10 min-h-[80vh] flex flex-col items-center justify-center gap-8 pb-32">
+                <div ref={inputRef} className="relative z-10 min-h-[100dvh] flex flex-col items-center justify-center gap-8 pt-16 pb-48 px-4">
                     <InputForm onSubmit={handleGenerate} isLoading={loading} hasCredits={credits > 0} />
                     {loading && (
                         <div className="absolute inset-x-0 bottom-0 top-0 z-20 flex items-center justify-center bg-black/80 backdrop-blur-md transition-all duration-500">
