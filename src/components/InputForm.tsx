@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { KikyoMon } from './icons/KikyoMon';
+import '../styles/noise.css';
 
 interface InputFormProps {
     onSubmit: (input: string) => void;
@@ -11,24 +12,37 @@ interface InputFormProps {
 export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, hasCredits = false }) => {
     const [input, setInput] = useState('');
 
+    const [flashActive, setFlashActive] = useState(false);
+
+    // Calculate noise intensity based on input length
+    const maxChars = 300;
+    const noiseLevel = Math.min(input.length / (maxChars * 0.5), 1); // Max noise reached at 50% length
+
+    useEffect(() => {
+        // Play subtle static sound here if AudioController was accessible
+    }, [noiseLevel]);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (input.trim() && !isLoading) {
-            if (hasCredits) {
-                // If user has credits, just submit (HomePage handles the rest)
-                onSubmit(input);
-            } else {
-                // Save worry to session storage for retrieval after payment
-                sessionStorage.setItem('pending_worry', input);
+            // Trigger purification flash
+            setFlashActive(true);
 
-                // Redirect to Stripe
-                const paymentLink = import.meta.env.VITE_STRIPE_PAYMENT_LINK;
-                if (paymentLink) {
-                    window.location.href = paymentLink;
+            // Wait for flash before submitting
+            setTimeout(() => {
+                setFlashActive(false);
+                if (hasCredits) {
+                    onSubmit(input);
                 } else {
-                    alert("Payment link not configured. Please contact the shrine.");
+                    sessionStorage.setItem('pending_worry', input);
+                    const paymentLink = import.meta.env.VITE_STRIPE_PAYMENT_LINK;
+                    if (paymentLink) {
+                        window.location.href = paymentLink;
+                    } else {
+                        alert("Payment link not configured. Please contact the shrine.");
+                    }
                 }
-            }
+            }, 600); // Wait for the peak of the flash animation
         }
     };
 
@@ -36,8 +50,19 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, hasCr
         <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-lg mx-auto bg-black/60 backdrop-blur-md border border-neon-purple/50 p-8 rounded-xl shadow-[0_0_30px_rgba(188,19,254,0.2)] relative overflow-hidden"
+            className={`w-full max-w-lg mx-auto bg-black/60 backdrop-blur-md border border-neon-purple/50 p-8 rounded-xl shadow-[0_0_30px_rgba(188,19,254,0.2)] relative overflow-hidden ${noiseLevel > 0.2 ? 'noise-active' : ''}`}
+            style={{
+                '--noise-intensity': flashActive ? 0 : noiseLevel,
+                '--noise-contrast': 1 + noiseLevel * 0.5,
+                '--noise-sepia': noiseLevel * 0.3,
+            } as React.CSSProperties}
         >
+            {/* Purification Flash Overlay */}
+            {flashActive && <div className="flash-overlay"></div>}
+
+            {/* Noise Overlay */}
+            <div className="noise-overlay" style={{ opacity: flashActive ? 0 : noiseLevel * 0.5 }}></div>
+
             {/* Decorative Corner lines */}
             <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-neon-cyan opacity-70"></div>
             <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-neon-pink opacity-70"></div>

@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { DashboardHeader } from '../components/dashboard/DashboardHeader';
 import { AchievementsView } from '../components/dashboard/AchievementsView';
 import { SEOHead } from '../components/seo/SEOHead';
+import { CremationEffect } from '../components/CremationEffect';
+import { userService } from '../services/userService';
 
 interface Reading {
     id: string;
@@ -33,6 +35,7 @@ export const ArchivesPage: React.FC = () => {
     const [goshuinCount, setGoshuinCount] = useState(0);
     const [activeTab, setActiveTab] = useState<'readings' | 'zazen' | 'goshuin' | 'achievements'>('readings');
     const [loading, setLoading] = useState(true);
+    const [crematingId, setCrematingId] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -86,6 +89,25 @@ export const ArchivesPage: React.FC = () => {
     const handleSignOut = async () => {
         await signOut();
         navigate('/');
+    };
+
+    const handleCremate = async (readingId: string) => {
+        if (!user || crematingId) return;
+
+        setCrematingId(readingId);
+
+        // Wait for animation to finish before actual db drop
+        setTimeout(async () => {
+            try {
+                await userService.deleteReading(readingId, user.id);
+                setReadings(prev => prev.filter(r => r.id !== readingId));
+            } catch (err) {
+                console.error("Cremation failed", err);
+                alert("The spirits could not be released. Please try again.");
+            } finally {
+                setCrematingId(null);
+            }
+        }, 1500); // 1.5s matches the animation duration
     };
 
     // Stats Calculation
@@ -243,6 +265,20 @@ export const ArchivesPage: React.FC = () => {
                                                 {reading.fortune_level}
                                             </div>
                                             <p className="text-sm text-gray-500 line-clamp-3 font-serif italic leading-relaxed">"{reading.input_text}"</p>
+                                        </div>
+
+                                        {/* Cremation Trigger */}
+                                        <button
+                                            onClick={() => handleCremate(reading.id)}
+                                            className="absolute bottom-2 right-2 text-[10px] text-gray-300 hover:text-red-500 font-sans tracking-widest uppercase transition-colors opacity-0 group-hover:opacity-100"
+                                            title="Permanently burn this record"
+                                        >
+                                            [ お焚き上げ ]
+                                        </button>
+
+                                        {/* Cremation Effect Overlay */}
+                                        <div className="absolute inset-0 z-50 pointer-events-none rounded-sm overflow-hidden">
+                                            <CremationEffect isActive={crematingId === reading.id} onComplete={() => { }} />
                                         </div>
                                     </div>
                                 </div>

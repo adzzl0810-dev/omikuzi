@@ -24,6 +24,19 @@ export const userService = {
         await userService.checkAndUpdateStreak(userId, data);
     },
 
+    async deleteReading(readingId: string, userId: string): Promise<void> {
+        const { error } = await supabase
+            .from('readings')
+            .delete()
+            .eq('id', readingId)
+            .eq('user_id', userId); // Ensure user owns the reading
+
+        if (error) {
+            console.error('Error deleting reading:', error);
+            throw new Error(`Failed to cremate record: ${error.message}`);
+        }
+    },
+
     async performReading(input: string, result: any, godImageUrl: string | null, isPaid: boolean = false, amountPaid: number = 0): Promise<void> {
         // Use RPC for secure transaction
         // Note: userId is derived from auth.uid() in the RPC for security

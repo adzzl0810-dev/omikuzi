@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { goshuinService, GoshuinEntry } from '../services/goshuinService';
 import { KikyoLoader } from './KikyoLoader';
 import { useAuth } from '../contexts/AuthContext';
+import '../styles/noise.css';
 
 export const GoshuinCho: React.FC = () => {
     const { user } = useAuth();
@@ -68,52 +69,62 @@ export const GoshuinCho: React.FC = () => {
                     </div>
 
                     {/* Entries */}
-                    {sortedEntries.map((entry, index) => (
-                        <motion.div
-                            key={entry.id}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="w-[300px] h-[450px] flex-shrink-0 border-r border-gray-300 relative bg-transparent flex flex-col items-center justify-between p-6 group"
-                        >
-                            {/* Paper Crease Effect */}
-                            <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/5 to-transparent pointer-events-none"></div>
-                            <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-black/5 to-transparent pointer-events-none"></div>
+                    {sortedEntries.map((entry, index) => {
+                        // Calculate Digital Wabi-Sabi (Age of stamp)
+                        const daysOld = Math.floor((Date.now() - new Date(entry.awarded_at).getTime()) / (1000 * 60 * 60 * 24));
+                        let wabiSabiClass = '';
+                        if (daysOld > 90) wabiSabiClass = 'wabi-sabi-4';
+                        else if (daysOld > 60) wabiSabiClass = 'wabi-sabi-3';
+                        else if (daysOld > 30) wabiSabiClass = 'wabi-sabi-2';
+                        else if (daysOld > 7) wabiSabiClass = 'wabi-sabi-1';
 
-                            {/* Date Stamp (Top Right) */}
-                            <div className="self-end writing-vertical-rl text-sm font-serif text-gray-500 tracking-widest py-2 h-1/3 flex items-center opacity-80">
-                                {new Date(entry.awarded_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                            </div>
+                        return (
+                            <motion.div
+                                key={entry.id}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: index * 0.1 }}
+                                className={`w-[300px] h-[450px] flex-shrink-0 border-r border-gray-300 relative bg-transparent flex flex-col items-center justify-between p-6 group ${wabiSabiClass}`}
+                            >
+                                {/* Paper Crease Effect */}
+                                <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/5 to-transparent pointer-events-none"></div>
+                                <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-black/5 to-transparent pointer-events-none"></div>
 
-                            {/* Main Stamp (Center) */}
-                            <div className="absolute inset-0 flex items-center justify-center z-10">
-                                <div className="w-40 h-40 rounded-full border-4 border-jap-vermilion/60 flex items-center justify-center relative opacity-90 mix-blend-multiply transform rotate-[-2deg] group-hover:rotate-0 transition-transform duration-500">
-                                    <div className="w-36 h-36 rounded-full border border-jap-vermilion/40 flex items-center justify-center relative">
-                                        <span className="text-jap-vermilion font-brush text-5xl font-bold writing-vertical-rl select-none">
-                                            参拝
-                                        </span>
-                                        <div className="absolute bottom-4 text-jap-vermilion font-serif text-[10px] tracking-widest font-bold uppercase opacity-80">
-                                            Visited
+                                {/* Date Stamp (Top Right) */}
+                                <div className="self-end writing-vertical-rl text-sm font-serif text-gray-500 tracking-widest py-2 h-1/3 flex items-center opacity-80">
+                                    {new Date(entry.awarded_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                </div>
+
+                                {/* Main Stamp (Center) */}
+                                <div className="absolute inset-0 flex items-center justify-center z-10">
+                                    <div className="w-40 h-40 rounded-full border-4 border-jap-vermilion/60 flex items-center justify-center relative opacity-90 mix-blend-multiply transform rotate-[-2deg] group-hover:rotate-0 transition-transform duration-500">
+                                        <div className="w-36 h-36 rounded-full border border-jap-vermilion/40 flex items-center justify-center relative">
+                                            <span className="text-jap-vermilion font-brush text-5xl font-bold writing-vertical-rl select-none">
+                                                参拝
+                                            </span>
+                                            <div className="absolute bottom-4 text-jap-vermilion font-serif text-[10px] tracking-widest font-bold uppercase opacity-80">
+                                                Visited
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Calligraphy Overlay */}
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                                <span className="text-black/70 font-brush text-6xl mix-blend-multiply transform -rotate-1">
-                                    奉拝
-                                </span>
-                            </div>
-
-                            {/* Bottom Note */}
-                            <div className="w-full text-center pt-2 opacity-50">
-                                <div className="text-[10px] font-sans text-gray-400 uppercase tracking-widest">
-                                    Digital Sanctuary
+                                {/* Calligraphy Overlay */}
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                                    <span className="text-black/70 font-brush text-6xl mix-blend-multiply transform -rotate-1">
+                                        奉拝
+                                    </span>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
+
+                                {/* Bottom Note */}
+                                <div className="w-full text-center pt-2 opacity-50">
+                                    <div className="text-[10px] font-sans text-gray-400 uppercase tracking-widest">
+                                        Digital Sanctuary
+                                    </div>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
 
                     {/* Empty Pages Filler */}
                     {[...Array(Math.max(0, 5 - sortedEntries.length))].map((_, i) => (
