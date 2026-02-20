@@ -69,7 +69,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, hasCr
                         </p>
                     ) : (
                         <p className="text-sm font-sans font-medium text-jap-gold-300">
-                            * An offering of ¥100 (approx. $1) is required.
+                            * An offering of $1 is required.
                         </p>
                     )}
                     <p className="text-[10px] text-gray-500 mt-2 italic">

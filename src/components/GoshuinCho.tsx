@@ -82,16 +82,19 @@ export const GoshuinCho: React.FC = () => {
 
                             {/* Date Stamp (Top Right) */}
                             <div className="self-end writing-vertical-rl text-sm font-serif text-gray-500 tracking-widest py-2 h-1/3 flex items-center opacity-80">
-                                {new Date(entry.awarded_at).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                {new Date(entry.awarded_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                             </div>
 
                             {/* Main Stamp (Center) */}
                             <div className="absolute inset-0 flex items-center justify-center z-10">
                                 <div className="w-40 h-40 rounded-full border-4 border-jap-vermilion/60 flex items-center justify-center relative opacity-90 mix-blend-multiply transform rotate-[-2deg] group-hover:rotate-0 transition-transform duration-500">
-                                    <div className="w-36 h-36 rounded-full border border-jap-vermilion/40 flex items-center justify-center">
+                                    <div className="w-36 h-36 rounded-full border border-jap-vermilion/40 flex items-center justify-center relative">
                                         <span className="text-jap-vermilion font-brush text-5xl font-bold writing-vertical-rl select-none">
                                             参拝
                                         </span>
+                                        <div className="absolute bottom-4 text-jap-vermilion font-serif text-[10px] tracking-widest font-bold uppercase opacity-80">
+                                            Visited
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -114,11 +117,14 @@ export const GoshuinCho: React.FC = () => {
 
                     {/* Empty Pages Filler */}
                     {[...Array(Math.max(0, 5 - sortedEntries.length))].map((_, i) => (
-                        <div key={`empty-${i}`} className="w-[300px] h-[450px] flex-shrink-0 border-r border-gray-300 relative bg-transparent flex items-center justify-center opacity-30">
+                        <div key={`empty-${i}`} className="w-[300px] h-[450px] flex-shrink-0 border-r border-gray-300 relative bg-transparent flex flex-col items-center justify-center gap-4 opacity-30">
                             {/* Paper Crease Effect */}
                             <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/5 to-transparent pointer-events-none"></div>
                             <span className="font-serif text-gray-400 writing-vertical-rl tracking-widest text-sm">
                                 (未記帳)
+                            </span>
+                            <span className="font-sans text-gray-400 text-[10px] tracking-[0.2em] uppercase">
+                                Empty
                             </span>
                         </div>
                     ))}
