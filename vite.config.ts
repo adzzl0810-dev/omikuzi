@@ -43,7 +43,7 @@ export default defineConfig({
             }
         }),
         Sitemap({
-            hostname: 'https://street-spirit.app',
+            hostname: 'https://omikuzi-fawn.vercel.app',
             dynamicRoutes: ['/archives', '/zazen', '/zazen/guide', '/columns', '/login'],
             readable: true,
             robots: [{

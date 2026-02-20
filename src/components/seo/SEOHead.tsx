@@ -18,19 +18,19 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
     path
 }) => {
     const location = useLocation();
-    const currentUrl = `https://street-spirit.app${path || location.pathname}`;
+    const currentUrl = `https://omikuzi-fawn.vercel.app${path || location.pathname}`;
 
     // Schema.org JSON-LD
     const schemaData = {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Street Spirit",
-        "url": "https://street-spirit.app",
+        "url": "https://omikuzi-fawn.vercel.app",
         "description": description,
         "keywords": "digital sanctuary, cyber shrine, online omikuji, AI fortune teller, cyberpunk aesthetic, digital zazen, mindfulness app, wabi-sabi, data cremation",
         "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://street-spirit.app/?q={search_term_string}",
+            "target": "https://omikuzi-fawn.vercel.app/?q={search_term_string}",
             "query-input": "required name=search_term_string"
         }
     };
@@ -47,14 +47,14 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
             <meta property="og:url" content={currentUrl} />
             <meta property="og:title" content={title} />
             <meta property="og:description" content={description} />
-            <meta property="og:image" content={`https://street-spirit.app${image}`} />
+            <meta property="og:image" content={`https://omikuzi-fawn.vercel.app${image}`} />
 
             {/* Twitter */}
             <meta property="twitter:card" content="summary_large_image" />
             <meta property="twitter:url" content={currentUrl} />
             <meta property="twitter:title" content={title} />
             <meta property="twitter:description" content={description} />
-            <meta property="twitter:image" content={`https://street-spirit.app${image}`} />
+            <meta property="twitter:image" content={`https://omikuzi-fawn.vercel.app${image}`} />
 
             {/* Schema.org Structured Data */}
             <script type="application/ld+json">
