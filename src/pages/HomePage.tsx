@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { SEOHead } from '../components/seo/SEOHead';
 import { WagaraBackground } from '../components/WagaraBackground';
 import { Hero } from '../components/Hero';
@@ -26,6 +27,8 @@ export const HomePage: React.FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [paymentLoading, setPaymentLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [result, setResult] = useState<OmikujiResult | null>(null);
     const [godImage, setGodImage] = useState<string | null>(null);
 
@@ -81,6 +84,7 @@ export const HomePage: React.FC = () => {
             setShowWorship(false);
             setShowOffering(false);
             setShowInputForm(true); // Show form logic (loading state)
+            setPaymentLoading(true);
 
             // Execute
             handleGenerate(pendingWorry, true); // true = isPaid
@@ -118,6 +122,7 @@ export const HomePage: React.FC = () => {
         }
 
         setLoading(true);
+        setErrorMsg(null);
         setResult(null);
         setGodImage(null);
 
@@ -152,15 +157,19 @@ export const HomePage: React.FC = () => {
         } catch (error: any) {
             console.error(error);
             const msg = error.message || "Unknown Error";
-            alert(`The Spirits are silent... (API Error: ${msg})`);
+            setErrorMsg(`Neural Network Interrupted: ${msg}. The Spirits apologize.`);
+            setTimeout(() => setErrorMsg(null), 5000);
         } finally {
             setLoading(false);
+            setPaymentLoading(false);
         }
     };
 
     const handleReset = () => {
         setResult(null);
         setGodImage(null);
+        setErrorMsg(null);
+        setPaymentLoading(false);
         setShowInputForm(false);
         setShowOffering(false);
         setShowTemizu(false);
@@ -264,8 +273,22 @@ export const HomePage: React.FC = () => {
                 <div ref={inputRef} className="relative z-10 min-h-[100dvh] flex flex-col items-center justify-center gap-8 pt-16 pb-48 px-4">
                     <InputForm onSubmit={handleGenerate} isLoading={loading} hasCredits={credits > 0} />
                     {loading && (
-                        <div className="absolute inset-x-0 bottom-0 top-0 z-20 flex items-center justify-center bg-black/80 backdrop-blur-md transition-all duration-500">
+                        <div className="absolute inset-x-0 bottom-0 top-0 z-20 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md transition-all duration-500">
                             <OmikujiBox />
+                            {paymentLoading && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="mt-8 text-center"
+                                >
+                                    <div className="text-jap-gold-300 font-serif tracking-[0.3em] text-sm animate-pulse mb-2">
+                                        OFFERING ACCEPTED
+                                    </div>
+                                    <div className="text-white/70 font-sans text-xs tracking-widest">
+                                        Connecting to Spiritual Network...
+                                    </div>
+                                </motion.div>
+                            )}
                         </div>
                     )}
                 </div>
@@ -299,6 +322,21 @@ export const HomePage: React.FC = () => {
                     // Ideally we refresh the EmaWall here, but EmaWall polls anyway
                 }}
             />
+
+            {/* Error Toast */}
+            {errorMsg && (
+                <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[100]">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        className="bg-black/90 border border-jap-vermilion px-6 py-4 shadow-[0_0_20px_rgba(255,51,51,0.3)] backdrop-blur-md rounded-sm flex items-center gap-3"
+                    >
+                        <span className="text-jap-vermilion">⚠️</span>
+                        <span className="text-white font-mono text-xs tracking-wider">{errorMsg}</span>
+                    </motion.div>
+                </div>
+            )}
 
             <OnboardingTour />
         </div >

@@ -20,6 +20,7 @@ import { DashboardLayout } from './layouts/DashboardLayout';
 
 import { SoundProvider } from './contexts/SoundContext';
 import { ReloadPrompt } from './components/ReloadPrompt';
+import { ScrollToTop } from './components/ui/ScrollToTop';
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
             <div className="min-h-screen bg-shinto-white font-serif text-jap-indigo">
                 <AudioController />
                 <ReloadPrompt />
+                <ScrollToTop />
                 <Routes>
                     <Route element={<DashboardLayout />}>
                         <Route path="/" element={<HomePage />} />
