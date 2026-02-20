@@ -10,6 +10,9 @@ import { AchievementsView } from '../components/dashboard/AchievementsView';
 import { SEOHead } from '../components/seo/SEOHead';
 import { CremationEffect } from '../components/CremationEffect';
 import { userService } from '../services/userService';
+import { OmikujiPaper } from '../components/OmikujiPaper';
+import { X } from 'lucide-react';
+
 
 interface Reading {
     id: string;
@@ -18,6 +21,7 @@ interface Reading {
     god_image_url: string | null;
     created_at: string;
     input_text: string;
+    advice_json: any;
 }
 
 interface ZazenSession {
@@ -36,6 +40,7 @@ export const ArchivesPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'readings' | 'zazen' | 'goshuin' | 'achievements'>('readings');
     const [loading, setLoading] = useState(true);
     const [crematingId, setCrematingId] = useState<string | null>(null);
+    const [selectedReading, setSelectedReading] = useState<Reading | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -57,7 +62,7 @@ export const ArchivesPage: React.FC = () => {
             // Fetch Readings
             const { data: readingsData } = await supabase
                 .from('readings')
-                .select('id, fortune_level, god_name, god_image_url, created_at, input_text')
+                .select('id, fortune_level, god_name, god_image_url, created_at, input_text, advice_json')
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false });
 
@@ -237,43 +242,33 @@ export const ArchivesPage: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
                             {readings.map((reading) => (
                                 <div key={reading.id} className="relative group perspective-1000">
-                                    <div className="relative bg-white border border-gray-200 p-6 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 rounded-sm">
+                                    <div
+                                        className="relative bg-white border border-gray-200 p-6 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 rounded-sm cursor-pointer h-full flex flex-col"
+                                        onClick={() => setSelectedReading(reading)}
+                                    >
                                         {/* Date Stamp */}
                                         <div className="absolute -top-3 -right-3 w-12 h-12 bg-jap-vermilion rounded-full flex items-center justify-center text-[10px] text-white font-bold font-sans shadow-md z-10 rotate-12">
                                             {new Date(reading.created_at).getDate()}
                                         </div>
 
-                                        {/* Image Area */}
-                                        <div className="aspect-[3/4] overflow-hidden mb-6 bg-gray-100 relative grayscale group-hover:grayscale-0 transition-all duration-700 shadow-inner">
-                                            {reading.god_image_url ? (
-                                                <img
-                                                    src={reading.god_image_url}
-                                                    alt={reading.god_name}
-                                                    className="w-full h-full object-cover mix-blend-multiply"
-                                                />
-                                            ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-300 font-serif p-4 text-center">
-                                                    No Image
-                                                </div>
-                                            )}
-                                        </div>
-
                                         {/* Text Info */}
-                                        <div className="text-center">
+                                        <div className="text-center flex-1 flex flex-col pt-4">
                                             <h3 className="text-xl font-bold font-serif text-jap-indigo mb-2">{reading.god_name}</h3>
                                             <div className="text-xs font-sans text-jap-vermilion uppercase tracking-widest mb-4 border-t border-b border-gray-100 py-1 inline-block">
                                                 {reading.fortune_level}
                                             </div>
-                                            <p className="text-sm text-gray-500 line-clamp-3 font-serif italic leading-relaxed">"{reading.input_text}"</p>
+                                            <div className="bg-gray-50 p-4 rounded-sm border border-gray-100 flex-1 flex items-center justify-center text-center">
+                                                <p className="text-sm text-gray-500 line-clamp-4 font-serif italic leading-relaxed">"{reading.input_text}"</p>
+                                            </div>
                                         </div>
 
                                         {/* Cremation Trigger */}
                                         <button
-                                            onClick={() => handleCremate(reading.id)}
-                                            className="absolute bottom-2 right-2 text-[10px] text-gray-300 hover:text-red-500 font-sans tracking-widest uppercase transition-colors opacity-0 group-hover:opacity-100"
+                                            onClick={(e) => { e.stopPropagation(); handleCremate(reading.id); }}
+                                            className="absolute bottom-2 right-2 text-[10px] text-gray-300 hover:text-red-500 font-sans tracking-widest uppercase transition-colors opacity-0 group-hover:opacity-100 z-20"
                                             title="Permanently burn this record"
                                         >
-                                            [ お焚き上げ ]
+                                            [ PURIFY (お焚き上げ) ]
                                         </button>
 
                                         {/* Cremation Effect Overlay */}
@@ -350,6 +345,31 @@ export const ArchivesPage: React.FC = () => {
                     </div>
                 )}
             </div>
+
+            {/* Reading details modal */}
+            {selectedReading && selectedReading.advice_json && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div
+                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        onClick={() => setSelectedReading(null)}
+                    ></div>
+                    <div className="relative z-10 w-full max-w-4xl h-[90vh] overflow-y-auto rounded-sm shadow-2xl bg-[#FCF9F2] overflow-x-hidden">
+                        <button
+                            onClick={() => setSelectedReading(null)}
+                            className="absolute top-4 right-4 z-50 p-2 bg-white/50 hover:bg-white rounded-full transition-colors text-jap-indigo shadow-sm"
+                        >
+                            <X size={24} />
+                        </button>
+                        <div className="w-full relative z-0">
+                            <OmikujiPaper
+                                result={selectedReading.advice_json}
+                                godImage={selectedReading.god_image_url}
+                                onRetry={() => setSelectedReading(null)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
